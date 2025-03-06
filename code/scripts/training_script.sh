@@ -2,7 +2,7 @@
 # Example training launch script
 
 # User-defined configuration variables
-MODEL="RoiNet9"
+MODEL="RoiNet9_plusk"
 DATASET="FIVES"
 CONFIG="code/config/config.json"
 EPOCHS=300
@@ -12,7 +12,7 @@ NUM_WORKERS=32
 LR=1e-4
 WEIGHT_DECAY=0.001
 LOGGING="True"
-OUTPUT_PREFIX="RoiNet9_FIVES_Dice_sameAsOtrosfives"
+OUTPUT_PREFIX="Test_bigK"
 THRESH_VALUE=100
 
 # Loss function variables

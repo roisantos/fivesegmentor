@@ -285,7 +285,7 @@ class SegmentationDataset(Dataset):
         """Applies a combination of augmentations."""
 
         if self.augmentation_config.get("otrosfives", False): # Check config
-            print("####### applying otrosfives augment @@@@@@@")
+            #print("####### applying otrosfives augment @@@@@@@")
             if random.random() < 0.5:  # 50% chance of applying geometric transformations
                 # Aplicar transformaciones geométricas con 50% de probabilidad
                 # --- Rotación fija aleatoria ---
