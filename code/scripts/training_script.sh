@@ -2,7 +2,7 @@
 # Example training launch script
 
 # User-defined configuration variables
-MODEL="RoiNet9_plusk"
+MODEL="RoiNetTest1bottleneck_residual"
 DATASET="FIVES"
 CONFIG="code/config/config.json"
 EPOCHS=300
@@ -12,7 +12,7 @@ NUM_WORKERS=32
 LR=1e-4
 WEIGHT_DECAY=0.001
 LOGGING="True"
-OUTPUT_PREFIX="Test_bigK"
+OUTPUT_PREFIX="Test_"
 THRESH_VALUE=100
 
 # Loss function variables

@@ -78,6 +78,11 @@ def run_inference_on_directory(image_dir, label_dir, output_dir, model_path):
         # Pad the image so its dimensions are multiples of 32 (matching training)
         pad_x = (image.shape[1] // 32 + 1) * 32 - image.shape[1]
         pad_y = (image.shape[0] // 32 + 1) * 32 - image.shape[0]
+        if (pad_x == 32): 
+            pad_x = 0
+        if (pad_y == 32): 
+            pad_y = 0
+
         image_padded = cv2.copyMakeBorder(image, pad_y // 2, pad_y // 2,
                                           pad_x // 2, pad_x // 2,
                                           cv2.BORDER_CONSTANT, value=0)
@@ -104,7 +109,7 @@ def run_inference_on_directory(image_dir, label_dir, output_dir, model_path):
         base_name = os.path.splitext(filename)[0]
         tensor_save_path = os.path.join(output_dir, f"{base_name}_output_tensor.pth")
         image_save_path = os.path.join(output_dir, f"{base_name}_output_image.png")
-        torch.save(output.cpu(), tensor_save_path)
+        #torch.save(output.cpu(), tensor_save_path)
         save_image(output, image_save_path)
 
         # Load the corresponding ground-truth label
@@ -119,6 +124,10 @@ def run_inference_on_directory(image_dir, label_dir, output_dir, model_path):
         # Pad the ground truth label to match the network's input size
         pad_x_label = (gt_label.shape[1] // 32 + 1) * 32 - gt_label.shape[1]
         pad_y_label = (gt_label.shape[0] // 32 + 1) * 32 - gt_label.shape[0]
+        if (pad_x_label == 32): 
+            pad_x_label = 0
+        if (pad_y_label == 32): 
+            pad_y_label = 0
         gt_label_padded = cv2.copyMakeBorder(gt_label, pad_y_label // 2, pad_y_label // 2,
                                              pad_x_label // 2, pad_x_label // 2,
                                              cv2.BORDER_CONSTANT, value=0)
@@ -253,13 +262,13 @@ def run_inference_on_directory(image_dir, label_dir, output_dir, model_path):
 
 # ------------------ User Settings ------------------
 # Directory containing the input images
-image_dir = r"/mnt/netapp2/Store_uni/home/usc/ec/rsm/FIVESc/test/image"
+image_dir = r"/mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fives-save/FIVESoriginal/test/image"
 # Directory containing the corresponding ground-truth labels
-label_dir = r"/mnt/netapp2/Store_uni/home/usc/ec/rsm/FIVESc/test/label"
+label_dir = r"/mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fives-save/FIVESoriginal/test/label"
 # Directory where the inference results will be saved
-output_dir = os.path.join('inference_results', 'RoiNetAugment_inference')
+output_dir = os.path.join('inference_results', 'VesselView_66epochs')
 # Path to the trained RoiNet model weights (update this if needed)
-model_path = '/mnt/netapp2/Store_uni/home/usc/ec/rsm/roinetlac/run_RoiNet_Dice/model_best.pth'
+model_path = '/mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fork-roi/fivesegmentor/run_benchmark_runs/RoiNet9_FIVES_Dice_sameAsOtrosfives_slurm_result_2025-03-05_19-14-41/RoiNet9_Dice/model_best.pth'
 
 # Run the inference
 run_inference_on_directory(image_dir, label_dir, output_dir, model_path)

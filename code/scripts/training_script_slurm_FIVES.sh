@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH -J RoiNet9_FIVES_Dice_sameAsOtrosfives_plusk      # Nombre del trabajo
-#SBATCH -o RoiNet9_FIVES_Dice_sameAsOtrosfives_plusk%j.log   # Archivo para la salida estándar (%j expande al JobID)
-#SBATCH -e RoiNet9_FIVES_Dice_sameAsOtrosfives_plusk%j.log    # Archivo para la salida de errores
+#SBATCH -J RoiNet3bottleneck_9kernelFives_simple_      # Nombre del trabajo
+#SBATCH -o RoiNet3bottleneck_9kernelFives_simple_output%j.log   # Archivo para la salida estándar (%j expande al JobID)
+#SBATCH -e RoiNet3bottleneck_9kernelFives_simple_error%j.log    # Archivo para la salida de errores
 #SBATCH --gres=gpu:a100:1        # Solicita GPU A100
 #SBATCH -c 32                    # 32 núcleos de CPU
 #SBATCH --mem=32G                # Memoria total
 #SBATCH -p medium
-#SBATCH -t 35:00:00              # Tiempo máximo de ejecución
+#SBATCH -t 20:00:00              # Tiempo máximo de ejecución
 
 # Cargar módulos necesarios
 module load cesga/2020
@@ -18,9 +18,8 @@ module load python/3.9.9
 cd /mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fork-roi/fivesegmentor
 source venv/bin/activate
 
-
 # User-defined configuration variables
-MODEL="RoiNet9_plusk"
+MODEL="RoiNetTest3bottleneck_simple"
 DATASET="FIVES"
 CONFIG="code/config/config.json"
 EPOCHS=300
@@ -30,7 +29,7 @@ NUM_WORKERS=32
 LR=1e-4
 WEIGHT_DECAY=0.001
 LOGGING="True"
-OUTPUT_PREFIX="RoiNet9_FIVES_Dice_sameAsOtrosfives_slurm_plusk_"
+OUTPUT_PREFIX="RoiNet3bottleneck_9kernel_Fives_simple_"
 THRESH_VALUE=100
 
 # Loss function variables
@@ -50,6 +49,7 @@ AUGMENT_NOISE="False"
 
 # Restormer
 RESTORMER="False"
+
 
 
 

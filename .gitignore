@@ -1,6 +1,9 @@
 log
 inference_results
+inference_results/
 inference_results_test
+code/scripts/inferScripts/inputs
+code/scripts/inferScripts/inputs/
 Test_set
 test_runs
 dataset

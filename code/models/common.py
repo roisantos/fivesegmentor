@@ -224,5 +224,30 @@ class LayerNorm(nn.Module):
 
 
 
+class SimpleResBlock(nn.Module):
+    """
+    Bloque simple estilo ResNet: una única convolución seguida de BatchNorm y ReLU.
+    Se añade la conexión residual, y se incluye el parámetro 'layer_num' para compatibilidad.
+    """
+    def __init__(self, in_channels, out_channels, stride=1, k_size=9, layer_num=None):
+        super(SimpleResBlock, self).__init__()
+        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=k_size,
+                              stride=stride, padding=k_size//2, bias=False)
+        self.bn = nn.BatchNorm2d(out_channels)
+        # Cambiamos inplace a False
+        self.relu = nn.ReLU(inplace=False)
+        self.shortcut = nn.Sequential()
+        if stride != 1 or in_channels != out_channels:
+            self.shortcut = nn.Sequential(
+                nn.Conv2d(in_channels, out_channels, kernel_size=1,
+                          stride=stride, bias=False),
+                nn.BatchNorm2d(out_channels)
+            )
 
-
+    def forward(self, x):
+        out = self.conv(x)
+        out = self.bn(out)
+        out = self.relu(out)
+        # Evitar suma inplace:
+        out = out + self.shortcut(x)
+        return out

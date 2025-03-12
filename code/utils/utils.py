@@ -122,6 +122,7 @@ def traverseDataset(model: nn.Module, loader: DataLoader, epoch: int,
         #print("Batch data format:", next(iter(tepoch)))
         #print("tepoch: ", tepoch)
         for i, (name, data, label) in enumerate(tepoch):
+            #print("Input shape:", data.shape)
             tepoch.set_description(description)
             data, label = data.to(device), label.to(device)
             

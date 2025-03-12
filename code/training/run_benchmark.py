@@ -78,8 +78,19 @@ def load_models_from_json(config_path):
         # Append the loss function to the model name
         #new_name = f"{name}_{loss_function}"
         new_name = name
-        if "RoiNet" in model_config["type"]:
+        if "RoiNet_3bottleneck" == model_config["type"]:
+            print("##DEBUG: Found RoiNet_3bottleneck")
+            models[new_name] = lambda mc=model_config: RoiNet_3bottleneck(
+                ch_in=mc.get("ch_in", 3),
+                ch_out=mc.get("ch_out", 1),
+                ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),
+                k_size=mc.get("k_size", 9),
+                cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
+                cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
+            )
+        elif "RoiNet" == model_config["type"]:
             # Capture model_config in the lambda using a default argument
+            print("##DEBUG: Found RoiNet")
             models[new_name] = lambda mc=model_config: RoiNet(
                 ch_in=mc.get("ch_in", 3),
                 ch_out=mc.get("ch_out", 1),
@@ -88,13 +99,57 @@ def load_models_from_json(config_path):
                 cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
                 cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
             )
-        elif "FRNet" in model_config["type"]:
+        elif "FRNet" == model_config["type"]:
+            print("##DEBUG: Found FRNet")
             models[new_name] = lambda mc=model_config: FRNet(
                 ch_in=mc.get("ch_in", 3),
                 ch_out=mc.get("ch_out", 1),
                 cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
                 cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
             )
+        elif "RoiNet_1bottleneck" == model_config["type"]:
+            print("##DEBUG: Found RoiNet_1bottleneck")
+            models[new_name] = lambda mc=model_config: RoiNet_1bottleneck(
+                ch_in=mc.get("ch_in", 3),
+                ch_out=mc.get("ch_out", 1),
+                ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),
+                k_size=mc.get("k_size", 3),
+                cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
+                cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
+            )
+        elif "RoiNetTest1bottleneck" == model_config["type"]:
+            print("##DEBUG: Found RoiNetTest1bottleneck")
+            models[new_name] = lambda mc=model_config: RoiNetTest1bottleneck(
+                ch_in=mc.get("ch_in", 3),
+                ch_out=mc.get("ch_out", 1),
+                ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),
+                k_size=mc.get("k_size", 9),
+                cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
+                cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
+            )
+        elif "RoiNetTest3bottleneck" == model_config["type"]:
+            print("##DEBUG: Found RoiNetTest3bottleneck")
+            models[new_name] = lambda mc=model_config: RoiNetTest3bottleneck(
+                ch_in=mc.get("ch_in", 3),
+                ch_out=mc.get("ch_out", 1),
+                ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),
+                k_size=mc.get("k_size", 9),
+                cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
+                cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
+            )
+        elif "RoiNetTest2bottleneck" == model_config["type"]:
+            print("##DEBUG: Found RoiNetTest2bottleneck")
+            models[new_name] = lambda mc=model_config: RoiNetTest2bottleneck(
+                ch_in=mc.get("ch_in", 3),
+                ch_out=mc.get("ch_out", 1),
+                ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),
+                k_size=mc.get("k_size", 9),
+                cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
+                cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
+            )
+
+
+            
     return models
 
 def log_parameters(args, config, dataset_name, model_name, augmentation_config, restormer_config, output_dir):
@@ -158,7 +213,7 @@ def train_and_evaluate(model_name, dataset, logging_enabled=False):
     """
 
 
-    print("\nModelo cargado en GPU:")
+    print(f"\nModelo cargado en GPU: {model}")
     print(f"- Parámetros totales: {sum(p.numel() for p in model.parameters())}")
     print(f"- Memoria ocupada por modelo en GPU: {sum(p.element_size() * p.nelement() for p in model.parameters()) / (1024 ** 2):.2f} MB")
     print_gpu_memory_info("Después de cargar el modelo en GPU")

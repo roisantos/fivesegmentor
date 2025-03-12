@@ -160,7 +160,122 @@
       "k_size": 11,
       "cls_init_block": "ResidualBlock",
       "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet_AblationOne_Simple": {
+      "type": "RoiNetAblationOneBlock",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "SimpleResBlock", 
+      "cls_conv_block": "SimpleResBlock"
+    },
+    "RoiNet_Ablation3_Simple": {
+      "type": "RoiNetAblationThreeBlock",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "SimpleResBlock",
+      "cls_conv_block": "SimpleResBlock"
+    },
+    "RoiNet_AblationOne_Residual": {
+      "type": "RoiNetAblationOneBlock",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock", 
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet_Ablation3_Residual": {
+      "type": "RoiNetAblationThreeBlock",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet_AblationOne_Simple_similar": {
+      "type": "RoiNetAblationOneBlock_similar",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "SimpleResBlock", 
+      "cls_conv_block": "SimpleResBlock"
+    },
+    "RoiNet_Ablation3_Simple_similar": {
+      "type": "RoiNetAblationThreeBlock_similar",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "SimpleResBlock",
+      "cls_conv_block": "SimpleResBlock"
+    },
+    "RoiNet_AblationOne_Residual_similar": {
+      "type": "RoiNetAblationOneBlock_similar",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock", 
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet_Ablation3_Residual_similar": {
+      "type": "RoiNetAblationThreeBlock_similar",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet_1bottleneck_residual": {
+      "type": "RoiNet_1bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet_3bottleneck_residual": {
+      "type": "RoiNet_3bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetTest1bottleneck_residual": {
+      "type": "RoiNetTest1bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetTest3bottleneck_residual": {
+      "type": "RoiNetTest3bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetTest2bottleneck_residual": {
+      "type": "RoiNetTest2bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetTest1bottleneck_simple": {
+      "type": "RoiNetTest1bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "SimpleResBlock",
+      "cls_conv_block": "SimpleResBlock"
+    },
+    "RoiNetTest3bottleneck_simple": {
+      "type": "RoiNetTest3bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "SimpleResBlock",
+      "cls_conv_block": "SimpleResBlock"
+    },
+    "RoiNetTest2bottleneck_simple": {
+      "type": "RoiNetTest2bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "SimpleResBlock",
+      "cls_conv_block": "SimpleResBlock"
     }
+
+
+    
   },
   "datasets": {
     "FIVES512": {
