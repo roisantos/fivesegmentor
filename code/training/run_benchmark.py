@@ -78,6 +78,7 @@ def load_models_from_json(config_path):
         # Append the loss function to the model name
         #new_name = f"{name}_{loss_function}"
         new_name = name
+        m_type = model_config["type"]
         if "RoiNet_3bottleneck" == model_config["type"]:
             print("##DEBUG: Found RoiNet_3bottleneck")
             models[new_name] = lambda mc=model_config: RoiNet_3bottleneck(
@@ -140,6 +141,66 @@ def load_models_from_json(config_path):
         elif "RoiNetTest2bottleneck" == model_config["type"]:
             print("##DEBUG: Found RoiNetTest2bottleneck")
             models[new_name] = lambda mc=model_config: RoiNetTest2bottleneck(
+                ch_in=mc.get("ch_in", 3),
+                ch_out=mc.get("ch_out", 1),
+                ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),
+                k_size=mc.get("k_size", 9),
+                cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
+                cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
+            )
+        elif m_type == "RoiNetNoSkip":
+            print("##DEBUG: Found RoiNetNoSkip")
+            models[new_name] = lambda mc=model_config: RoiNetNoSkip(
+                ch_in=mc.get("ch_in", 3),
+                ch_out=mc.get("ch_out", 1),
+                ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),
+                k_size=mc.get("k_size", 9),
+                cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
+                cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
+            )
+        elif m_type == "RoiNetSumFusion":
+            print("##DEBUG: Found RoiNetSumFusion")
+            models[new_name] = lambda mc=model_config: RoiNetSumFusion(
+                ch_in=mc.get("ch_in", 3),
+                ch_out=mc.get("ch_out", 1),
+                ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),
+                k_size=mc.get("k_size", 9),
+                cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
+                cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
+            )
+        elif m_type == "RoiNetAttnSkip":
+            print("##DEBUG: Found RoiNetAttnSkip")
+            models[new_name] = lambda mc=model_config: RoiNetAttnSkip(
+                ch_in=mc.get("ch_in", 3),
+                ch_out=mc.get("ch_out", 1),
+                ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),
+                k_size=mc.get("k_size", 9),
+                cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
+                cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
+            )
+        elif m_type == "RoiNetResSkip":
+            print("##DEBUG: Found RoiNetResSkip")
+            models[new_name] = lambda mc=model_config: RoiNetResSkip(
+                ch_in=mc.get("ch_in", 3),
+                ch_out=mc.get("ch_out", 1),
+                ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),
+                k_size=mc.get("k_size", 9),
+                cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
+                cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
+            )
+        elif m_type == "RoiNetConcatPlus":
+            print("##DEBUG: Found RoiNetConcatPlus")
+            models[new_name] = lambda mc=model_config: RoiNetConcatPlus(
+                ch_in=mc.get("ch_in", 3),
+                ch_out=mc.get("ch_out", 1),
+                ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),
+                k_size=mc.get("k_size", 9),
+                cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
+                cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
+            )
+        elif m_type == "RoiNetMultiSkip":
+            print("##DEBUG: Found RoiNetMultiSkip")
+            models[new_name] = lambda mc=model_config: RoiNetMultiSkip(
                 ch_in=mc.get("ch_in", 3),
                 ch_out=mc.get("ch_out", 1),
                 ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),

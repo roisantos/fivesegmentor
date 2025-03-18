@@ -272,6 +272,60 @@
       "ch_out": 1,
       "cls_init_block": "SimpleResBlock",
       "cls_conv_block": "SimpleResBlock"
+    },
+    "RoiNetNoSkip": {
+      "type": "RoiNetNoSkip",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetSumFusion": {
+      "type": "RoiNetSumFusion",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetAttnSkip": {
+      "type": "RoiNetAttnSkip",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetResSkip": {
+      "type": "RoiNetResSkip",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetConcatPlus": {
+      "type": "RoiNetConcatPlus",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetMultiSkip": {
+      "type": "RoiNetMultiSkip",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
     }
 
 

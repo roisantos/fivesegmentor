@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH -J RoiNet3bottleneck_9kernelFives_simple_      # Nombre del trabajo
-#SBATCH -o RoiNet3bottleneck_9kernelFives_simple_output%j.log   # Archivo para la salida estándar (%j expande al JobID)
-#SBATCH -e RoiNet3bottleneck_9kernelFives_simple_error%j.log    # Archivo para la salida de errores
+#SBATCH -J RoiNetMultiSkip__      # Nombre del trabajo
+#SBATCH -o RoiNetMultiSkip__output%j.log   # Archivo para la salida estándar (%j expande al JobID)
+#SBATCH -e RoiNetMultiSkip__error%j.log    # Archivo para la salida de errores
 #SBATCH --gres=gpu:a100:1        # Solicita GPU A100
 #SBATCH -c 32                    # 32 núcleos de CPU
 #SBATCH --mem=32G                # Memoria total
@@ -19,7 +19,7 @@ cd /mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fork-roi/fivesegmentor
 source venv/bin/activate
 
 # User-defined configuration variables
-MODEL="RoiNetTest3bottleneck_simple"
+MODEL="RoiNetMultiSkip"
 DATASET="FIVES"
 CONFIG="code/config/config.json"
 EPOCHS=300
@@ -29,7 +29,7 @@ NUM_WORKERS=32
 LR=1e-4
 WEIGHT_DECAY=0.001
 LOGGING="True"
-OUTPUT_PREFIX="RoiNet3bottleneck_9kernel_Fives_simple_"
+OUTPUT_PREFIX="RoiNetMultiSkip_"
 THRESH_VALUE=100
 
 # Loss function variables

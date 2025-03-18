@@ -251,3 +251,52 @@ class SimpleResBlock(nn.Module):
         # Evitar suma inplace:
         out = out + self.shortcut(x)
         return out
+
+
+
+class SumMergeBlock(nn.Module):
+    """
+    Bloque para fusionar dos tensores mediante suma seguida de refinamiento.
+    Se espera que la suma se realice sobre tensores de igual dimensión.
+    """
+    def __init__(self, channels_in, channels_out):
+        super(SumMergeBlock, self).__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(channels_in, channels_out, kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(channels_out),
+            nn.ReLU(inplace=True)
+        )
+    def forward(self, x):
+        return self.conv(x)
+
+class AttentionGate(nn.Module):
+    """
+    Módulo de atención para skip connections.
+    Recibe una skip connection (x) y una señal de gating (g) y
+    genera una versión ponderada de la skip connection.
+    """
+    def __init__(self, F_g, F_l, F_int):
+        super(AttentionGate, self).__init__()
+        self.W_g = nn.Sequential(
+            nn.Conv2d(F_g, F_int, kernel_size=1, stride=1, padding=0, bias=True),
+            nn.BatchNorm2d(F_int)
+        )
+        self.W_x = nn.Sequential(
+            nn.Conv2d(F_l, F_int, kernel_size=1, stride=1, padding=0, bias=True),
+            nn.BatchNorm2d(F_int)
+        )
+        self.psi = nn.Sequential(
+            nn.Conv2d(F_int, 1, kernel_size=1, stride=1, padding=0, bias=True),
+            nn.BatchNorm2d(1),
+            nn.Sigmoid()
+        )
+        self.relu = nn.ReLU(inplace=True)
+
+    def forward(self, x, g):
+        # x: características de la skip connection
+        # g: señal de gating (por ejemplo, salida del decoder tras upsampling)
+        g1 = self.W_g(g)
+        x1 = self.W_x(x)
+        psi = self.relu(g1 + x1)
+        psi = self.psi(psi)
+        return x * psi

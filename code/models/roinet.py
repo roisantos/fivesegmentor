@@ -1006,3 +1006,365 @@ class RoiNetTest2bottleneck(nn.Module):
         out5 = self.dict_module["conv5"](out4)             # (B, 32, H, W)
         final = self.dict_module["final"](out5)            # (B, ch_out, H, W)
         return final
+
+
+
+class RoiNetNoSkip(RoiNet):
+    """
+    Variante de RoiNet en la que se eliminan las skip connections.
+    Se redefinen los módulos de fusión para que no requieran concatenar
+    características de las rutas laterales, de modo que la red procese
+    únicamente la señal de upsampling.
+    """
+    def __init__(self, ch_in, ch_out, ls_mid_ch=[32, 64, 128, 128, 64, 32],
+                 k_size=9,
+                 cls_init_block=ResidualBlock, cls_conv_block=ResidualBlock):
+        super().__init__(ch_in, ch_out, ls_mid_ch=ls_mid_ch,
+                         k_size=k_size, cls_init_block=cls_init_block,
+                         cls_conv_block=cls_conv_block)
+        # Reconfiguramos merge3 y merge4 para procesar solo la señal de upsampling.
+        # En merge3, se espera una entrada de dimensión (C = ls_mid_ch[3]//2)
+        self.dict_module["merge3"] = nn.Sequential(
+            nn.Conv2d(ls_mid_ch[3] // 2, ls_mid_ch[1], kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(ls_mid_ch[1]),
+            nn.ReLU(inplace=True)
+        )
+        # En merge4, la entrada será la salida de up4 con canales ls_mid_ch[4]//2.
+        self.dict_module["merge4"] = nn.Sequential(
+            nn.Conv2d(ls_mid_ch[4] // 2, ls_mid_ch[0], kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(ls_mid_ch[0]),
+            nn.ReLU(inplace=True)
+        )
+
+    def forward(self, x):
+        # Encoder
+        out0 = self.dict_module["conv0"](x)
+        out1 = self.dict_module["conv1"](out0)
+        out1 = self.dict_module["pool1"](out1)
+        out2 = self.dict_module["conv2"](out1)
+        out2 = self.dict_module["pool2"](out2)
+        
+        # Bottleneck: se utilizan dos bloques
+        bottle1 = self.dict_module["bottle1"](out2)
+        bottle2 = self.dict_module["bottle2"](bottle1)
+        bottle_out = bottle2  # No se utiliza skip2
+        
+        # Decoder (sin skip connections)
+        out3 = self.dict_module["conv3"](bottle_out)
+        out3 = self.dict_module["up3"](out3)
+        out3 = self.dict_module["merge3"](out3)
+        out4 = self.dict_module["conv4"](out3)
+        out4 = self.dict_module["up4"](out4)
+        out4 = self.dict_module["merge4"](out4)
+        out5 = self.dict_module["conv5"](out4)
+        final = self.dict_module["final"](out5)
+
+        return final
+
+
+# 2. Variante con fusión por suma en lugar de concatenación: RoiNetSumFusion
+class RoiNetSumFusion(RoiNet):
+    """
+    Variante de RoiNet que fusiona las skip connections mediante suma en vez de concatenación.
+    Se incorpora un bloque de proyección para igualar dimensiones antes de la suma,
+    y se redefinen los módulos merge3 y merge4 para operar sobre la suma.
+    """
+    def __init__(self, ch_in, ch_out, ls_mid_ch=[32, 64, 128, 128, 64, 32],
+                 k_size=9,
+                 cls_init_block=ResidualBlock, cls_conv_block=ResidualBlock):
+        super().__init__(ch_in, ch_out, ls_mid_ch=ls_mid_ch,
+                         k_size=k_size, cls_init_block=cls_init_block,
+                         cls_conv_block=cls_conv_block)
+        # En la arquitectura original, skip1 (salida de pool1) tiene 128 canales,
+        # mientras que la salida de up3 tiene ls_mid_ch[3]//2 canales (64 si ls_mid_ch[3]==128).
+        # Se añade una capa de proyección para transformar skip1 a 64 canales.
+        self.proj_skip1 = nn.Conv2d(ls_mid_ch[1] * 2, ls_mid_ch[3] // 2, kernel_size=1, bias=False)
+        # Se redefinen merge3 y merge4 para trabajar con la suma.
+        self.dict_module["merge3"] = nn.Sequential(
+            nn.Conv2d(ls_mid_ch[3] // 2, ls_mid_ch[1], kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(ls_mid_ch[1]),
+            nn.ReLU(inplace=True)
+        )
+        self.dict_module["merge4"] = nn.Sequential(
+            nn.Conv2d(ls_mid_ch[4] // 2, ls_mid_ch[0], kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(ls_mid_ch[0]),
+            nn.ReLU(inplace=True)
+        )
+
+    def forward(self, x):
+        # Encoder
+        out0 = self.dict_module["conv0"](x)
+        out1 = self.dict_module["conv1"](out0)
+        out1 = self.dict_module["pool1"](out1)
+        skip1 = out1
+        out2 = self.dict_module["conv2"](out1)
+        out2 = self.dict_module["pool2"](out2)
+        skip2 = out2
+
+        # Bottleneck: se usan dos bloques
+        bottle1 = self.dict_module["bottle1"](out2)
+        bottle2 = self.dict_module["bottle2"](bottle1)
+        bottle_cat = torch.cat([bottle2, skip2], dim=1)
+        bottle_out = self.dict_module["merge2"](bottle_cat)
+
+        # Decoder con fusión por suma:
+        out3 = self.dict_module["conv3"](bottle_out)
+        out3 = self.dict_module["up3"](out3)  # Supongamos que out3 tiene, por ejemplo, 64 canales
+        # Proyectamos skip1 para igualar dimensiones:
+        skip1_proj = self.proj_skip1(skip1)  # skip1 originalmente tiene 128 canales
+        out3 = self.dict_module["merge3"](out3 + skip1_proj)
+        
+        out4 = self.dict_module["conv4"](out3)
+        out4 = self.dict_module["up4"](out4)  # out4: 32 canales
+        # Sumamos directamente con out0 (ya que éste posee 32 canales)
+        out4 = self.dict_module["merge4"](out4 + out0)
+        
+        out5 = self.dict_module["conv5"](out4)
+        final = self.dict_module["final"](out5)
+        return final
+
+
+# 3. Variante con atención en las skip connections: RoiNetAttnSkip
+class RoiNetAttnSkip(RoiNet):
+    """
+    Variante de RoiNet que incorpora un mecanismo de atención en las skip connections.
+    Se utiliza un módulo AttentionGate (definido en common.py) para ponderar la skip connection
+    antes de fusionarla con la señal del decoder.
+    """
+    def __init__(self, ch_in, ch_out, ls_mid_ch=[32, 64, 128, 128, 64, 32],
+                 k_size=9,
+                 cls_init_block=ResidualBlock, cls_conv_block=ResidualBlock):
+        super().__init__(ch_in, ch_out, ls_mid_ch=ls_mid_ch,
+                         k_size=k_size, cls_init_block=cls_init_block,
+                         cls_conv_block=cls_conv_block)
+        # Se definen módulos de atención para cada skip connection.
+        # Para skip1: skip1 tiene 128 canales y la señal de gating (de up3) tiene 64 canales.
+        self.attn_skip1 = AttentionGate(F_g=ls_mid_ch[3] // 2, F_l=ls_mid_ch[1] * 2, F_int=ls_mid_ch[3] // 2)
+        # Para skip0: skip0 tiene 32 canales y la señal de gating (de up4) tiene 32 canales.
+        self.attn_skip0 = AttentionGate(F_g=ls_mid_ch[4] // 2, F_l=ls_mid_ch[0], F_int=ls_mid_ch[4] // 2)
+
+        # Se mantienen los módulos merge3 y merge4 originales.
+            
+    def forward(self, x):
+        # Encoder
+        out0 = self.dict_module["conv0"](x)
+        out1 = self.dict_module["conv1"](out0)
+        out1 = self.dict_module["pool1"](out1)
+        skip1 = out1
+        out2 = self.dict_module["conv2"](out1)
+        out2 = self.dict_module["pool2"](out2)
+        skip2 = out2
+
+        # Bottleneck: se aplican dos bloques
+        bottle1 = self.dict_module["bottle1"](out2)
+        bottle2 = self.dict_module["bottle2"](bottle1)
+        bottle_cat = torch.cat([bottle2, skip2], dim=1)
+        bottle_out = self.dict_module["merge2"](bottle_cat)
+
+        # Decoder con atención en las skip connections:
+        out3 = self.dict_module["conv3"](bottle_out)
+        out3 = self.dict_module["up3"](out3)  # out3: 64 canales
+        # Aplicamos atención a skip1 usando out3 como señal de gating:
+        attn_skip1 = self.attn_skip1(skip1, out3)
+        out3 = torch.cat([out3, attn_skip1], dim=1)
+        out3 = self.dict_module["merge3"](out3)
+        
+        out4 = self.dict_module["conv4"](out3)
+        out4 = self.dict_module["up4"](out4)  # out4: 32 canales
+        # Aplicamos atención a out0 usando out4 como gating:
+        attn_skip0 = self.attn_skip0(out0, out4)
+        out4 = torch.cat([out4, attn_skip0], dim=1)
+        out4 = self.dict_module["merge4"](out4)
+        
+        out5 = self.dict_module["conv5"](out4)
+        final = self.dict_module["final"](out5)
+        return final
+
+class RoiNetResSkip(RoiNet):
+    """
+    Variante de RoiNet en la que las skip connections se fusionan de forma residual.
+    Se utiliza una proyección (conv1x1) para adaptar las dimensiones y se refina la suma.
+    """
+    def __init__(self, ch_in, ch_out, ls_mid_ch=[32, 64, 128, 128, 64, 32],
+                 k_size=9,
+                 cls_init_block=ResidualBlock, cls_conv_block=ResidualBlock):
+        super().__init__(ch_in, ch_out, ls_mid_ch=ls_mid_ch,
+                         k_size=k_size, cls_init_block=cls_init_block,
+                         cls_conv_block=cls_conv_block)
+        # Proyección para la skip connection de pool1 (skip1)
+        self.res_skip1 = nn.Conv2d(ls_mid_ch[1] * 2, ls_mid_ch[3] // 2, kernel_size=1, bias=False)
+        # Para la skip connection de conv0, se usa una identidad
+        self.res_skip0 = nn.Identity()
+        # Bloques de refinamiento tras la suma en cada fusión
+        self.refine3 = nn.Sequential(
+            nn.Conv2d(ls_mid_ch[3] // 2, ls_mid_ch[3] // 2, kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(ls_mid_ch[3] // 2),
+            nn.ReLU(inplace=True)
+        )
+        self.refine4 = nn.Sequential(
+            nn.Conv2d(ls_mid_ch[4] // 2, ls_mid_ch[4] // 2, kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(ls_mid_ch[4] // 2),
+            nn.ReLU(inplace=True)
+        )
+        # Reemplazamos merge3 y merge4 para que se adapten a la fusión residual:
+        # Originalmente, merge3 esperaba (ls_mid_ch[3]//2 + ls_mid_ch[1]*2)=192 canales.
+        # En fusión residual, sumamos dos tensores con ls_mid_ch[3]//2 canales cada uno.
+        self.dict_module["merge3"] = nn.Sequential(
+            nn.Conv2d(ls_mid_ch[3] // 2, ls_mid_ch[1], kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(ls_mid_ch[1]),
+            nn.ReLU(inplace=True)
+        )
+        # Para merge4, originalmente se concatenaban out4 (ls_mid_ch[4]//2) y out0 (ls_mid_ch[0]),
+        # es decir, 32+32=64 canales; en la fusión residual, la suma da ls_mid_ch[4]//2 (32) canales.
+        self.dict_module["merge4"] = nn.Sequential(
+            nn.Conv2d(ls_mid_ch[4] // 2, ls_mid_ch[0], kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(ls_mid_ch[0]),
+            nn.ReLU(inplace=True)
+        )
+
+    def forward(self, x):
+        # Encoder
+        out0 = self.dict_module["conv0"](x)
+        out1 = self.dict_module["conv1"](out0)
+        out1 = self.dict_module["pool1"](out1)
+        skip1 = out1
+        out2 = self.dict_module["conv2"](out1)
+        out2 = self.dict_module["pool2"](out2)
+        skip2 = out2
+
+        # Bottleneck: se usan dos bloques
+        bottle1 = self.dict_module["bottle1"](out2)
+        bottle2 = self.dict_module["bottle2"](bottle1)
+        bottle_cat = torch.cat([bottle2, skip2], dim=1)
+        bottle_out = self.dict_module["merge2"](bottle_cat)
+
+        # Decoder con fusión residual:
+        out3 = self.dict_module["conv3"](bottle_out)
+        out3 = self.dict_module["up3"](out3)  # Resultado con canales = ls_mid_ch[3]//2 (64)
+        skip1_proj = self.res_skip1(skip1)      # Proyecta skip1 a 64 canales
+        fusion3 = out3 + skip1_proj             # Suma residual: tensor con 64 canales
+        fusion3 = self.refine3(fusion3)
+        out3 = self.dict_module["merge3"](fusion3)  # Ahora merge3 espera 64 canales y produce ls_mid_ch[1] (64)
+
+        out4 = self.dict_module["conv4"](out3)
+        out4 = self.dict_module["up4"](out4)      # Resultado con canales = ls_mid_ch[4]//2 (32)
+        skip0 = self.res_skip0(out0)              # out0 tiene 32 canales
+        fusion4 = out4 + skip0                    # Suma residual: 32 canales
+        fusion4 = self.refine4(fusion4)
+        out4 = self.dict_module["merge4"](fusion4)  # merge4 espera 32 canales y produce ls_mid_ch[0] (32)
+
+        out5 = self.dict_module["conv5"](out4)
+        final = self.dict_module["final"](out5)
+        return final
+
+
+class RoiNetConcatPlus(RoiNet):
+    """
+    Variante de RoiNet que utiliza la concatenación de skip connections (como en el modelo original)
+    y, a continuación, aplica un bloque extra de refinamiento en las fusiones (merge3 y merge4).
+    """
+    def __init__(self, ch_in, ch_out, ls_mid_ch=[32, 64, 128, 128, 64, 32],
+                 k_size=9,
+                 cls_init_block=ResidualBlock, cls_conv_block=ResidualBlock):
+        super().__init__(ch_in, ch_out, ls_mid_ch=ls_mid_ch,
+                         k_size=k_size, cls_init_block=cls_init_block,
+                         cls_conv_block=cls_conv_block)
+        # Bloques de refinamiento extra después de merge3 y merge4
+        self.refine_merge3 = nn.Sequential(
+            nn.Conv2d(ls_mid_ch[1], ls_mid_ch[1], kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(ls_mid_ch[1]),
+            nn.ReLU(inplace=True)
+        )
+        self.refine_merge4 = nn.Sequential(
+            nn.Conv2d(ls_mid_ch[0], ls_mid_ch[0], kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(ls_mid_ch[0]),
+            nn.ReLU(inplace=True)
+        )
+
+    def forward(self, x):
+        # Encoder
+        out0 = self.dict_module["conv0"](x)
+        out1 = self.dict_module["conv1"](out0)
+        out1 = self.dict_module["pool1"](out1)
+        skip1 = out1
+        out2 = self.dict_module["conv2"](out1)
+        out2 = self.dict_module["pool2"](out2)
+        skip2 = out2
+
+        # Bottleneck (dos bloques)
+        bottle1 = self.dict_module["bottle1"](out2)
+        bottle2 = self.dict_module["bottle2"](bottle1)
+        bottle_cat = torch.cat([bottle2, skip2], dim=1)
+        bottle_out = self.dict_module["merge2"](bottle_cat)
+
+        # Decoder con concatenación y refinamiento extra
+        out3 = self.dict_module["conv3"](bottle_out)
+        out3 = self.dict_module["up3"](out3)
+        out3 = torch.cat([out3, skip1], dim=1)
+        out3 = self.dict_module["merge3"](out3)
+        out3 = self.refine_merge3(out3)
+
+        out4 = self.dict_module["conv4"](out3)
+        out4 = self.dict_module["up4"](out4)
+        out4 = torch.cat([out4, out0], dim=1)
+        out4 = self.dict_module["merge4"](out4)
+        out4 = self.refine_merge4(out4)
+
+        out5 = self.dict_module["conv5"](out4)
+        final = self.dict_module["final"](out5)
+        return final
+
+
+class RoiNetMultiSkip(RoiNet):
+    """
+    Variante de RoiNet que utiliza múltiples skip connections en la fusión del decoder.
+    En merge3 se concatenan la salida del upsampling, skip1 y una versión proyectada de out0.
+    """
+    def __init__(self, ch_in, ch_out, ls_mid_ch=[32, 64, 128, 128, 64, 32],
+                 k_size=9,
+                 cls_init_block=ResidualBlock, cls_conv_block=ResidualBlock):
+        super().__init__(ch_in, ch_out, ls_mid_ch=ls_mid_ch,
+                         k_size=k_size, cls_init_block=cls_init_block,
+                         cls_conv_block=cls_conv_block)
+        # Redefinimos merge3 para que espere la concatenación de tres entradas:
+        # up3 (canales: ls_mid_ch[3]//2), skip1 (canales: ls_mid_ch[1]*2) y out0 proyectado (canales: ls_mid_ch[0])
+        in_channels_merge3 = (ls_mid_ch[3] // 2) + (ls_mid_ch[1] * 2) + ls_mid_ch[0]
+        self.dict_module["merge3"] = nn.Sequential(
+            nn.Conv2d(in_channels_merge3, ls_mid_ch[1], kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(ls_mid_ch[1]),
+            nn.ReLU(inplace=True)
+        )
+        # Cambiamos la proyección para out0: aplicamos downsampling para obtener H/2 × W/2
+        self.proj_out0 = nn.MaxPool2d(kernel_size=2, stride=2)
+
+    def forward(self, x):
+        # Encoder
+        out0 = self.dict_module["conv0"](x)              # (B, 32, H, W)
+        out1 = self.dict_module["conv1"](out0)             # (B, 64, H, W)
+        out1 = self.dict_module["pool1"](out1)             # (B, 128, H/2, W/2)
+        skip1 = out1
+        out2 = self.dict_module["conv2"](out1)             # (B, 128, H/2, W/2)
+        out2 = self.dict_module["pool2"](out2)             # (B, 256, H/4, W/4)
+        skip2 = out2
+
+        # Bottleneck: dos bloques
+        bottle1 = self.dict_module["bottle1"](out2)
+        bottle2 = self.dict_module["bottle2"](bottle1)
+        bottle_cat = torch.cat([bottle2, skip2], dim=1)    # (B, 256+256=512, H/4, W/4)
+        bottle_out = self.dict_module["merge2"](bottle_cat)  # (B, 256, H/4, W/4)
+
+        # Decoder: upsampling y fusión multi-skip
+        out3 = self.dict_module["conv3"](bottle_out)
+        out3 = self.dict_module["up3"](out3)               # (B, ls_mid_ch[3]//2, H/2, W/2) e.g. (B, 64, H/2, W/2)
+        proj_out0 = self.proj_out0(out0)                   # (B, 32, H/2, W/2)
+        fusion3 = torch.cat([out3, skip1, proj_out0], dim=1)  # (B, 64+128+32 = 224, H/2, W/2)
+        out3 = self.dict_module["merge3"](fusion3)
+
+        out4 = self.dict_module["conv4"](out3)
+        out4 = self.dict_module["up4"](out4)
+        out4 = torch.cat([out4, out0], dim=1)
+        out4 = self.dict_module["merge4"](out4)
+
+        out5 = self.dict_module["conv5"](out4)
+        final = self.dict_module["final"](out5)
+        return final

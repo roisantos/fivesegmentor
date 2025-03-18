@@ -1,0 +1,829 @@
+slurmstepd: info: Setting TMPDIR to /scratch/11061518. Previous errors about TMPDIR can be discarded
+Restormer model not found. Restormer preprocessing will be disabled.
+##DEBUG: Found FRNet
+##DEBUG: Found RoiNet
+##DEBUG: Found RoiNet
+##DEBUG: Found RoiNet
+##DEBUG: Found RoiNet
+##DEBUG: Found RoiNet
+##DEBUG: Found RoiNet
+##DEBUG: Found RoiNet
+##DEBUG: Found RoiNet_1bottleneck
+##DEBUG: Found RoiNet_3bottleneck
+##DEBUG: Found RoiNetTest1bottleneck
+##DEBUG: Found RoiNetTest3bottleneck
+##DEBUG: Found RoiNetTest2bottleneck
+##DEBUG: Found RoiNetTest1bottleneck
+##DEBUG: Found RoiNetTest3bottleneck
+##DEBUG: Found RoiNetTest2bottleneck
+##DEBUG: Found RoiNetNoSkip
+##DEBUG: Found RoiNetSumFusion
+##DEBUG: Found RoiNetAttnSkip
+##DEBUG: Found RoiNetResSkip
+##DEBUG: Found RoiNetConcatPlus
+##DEBUG: Found RoiNetMultiSkip
+Available Models: ['FRNet', 'RoiNet11', 'RoiNet9', 'RoiNet9_plusk', 'RoiNet7', 'RoiNet5', 'RoiNet3', 'RoiNetR', 'RoiNet_1bottleneck_residual', 'RoiNet_3bottleneck_residual', 'RoiNetTest1bottleneck_residual', 'RoiNetTest3bottleneck_residual', 'RoiNetTest2bottleneck_residual', 'RoiNetTest1bottleneck_simple', 'RoiNetTest3bottleneck_simple', 'RoiNetTest2bottleneck_simple', 'RoiNetNoSkip', 'RoiNetSumFusion', 'RoiNetAttnSkip', 'RoiNetResSkip', 'RoiNetConcatPlus', 'RoiNetMultiSkip']
+Datasets_library: {'FIVES512': {'paths': {'train': 'dataset/FIVES512/train', 'val': 'dataset/FIVES512/val', 'test': 'dataset/FIVES512/test'}, 'preprocessing': {'start': 0, 'end': 1}}, 'FIVES': {'paths': {'train': 'dataset/FIVES/train', 'val': 'dataset/FIVES/val', 'test': 'dataset/FIVES/test'}, 'preprocessing': {'start': 0, 'end': 1}}}
+USING CHANNELS = 3
+Available Datasets: ['FIVES512', 'FIVES']
+
+All datasets: {'FIVES512': {'train': <ds.dataset.SegmentationDataset object at 0x1484be97e310>, 'val': <ds.dataset.SegmentationDataset object at 0x1484be921450>, 'test': <ds.dataset.SegmentationDataset object at 0x1484be922c90>}, 'FIVES': {'train': <ds.dataset.SegmentationDataset object at 0x1484be925750>, 'val': <ds.dataset.SegmentationDataset object at 0x1484be905190>, 'test': <ds.dataset.SegmentationDataset object at 0x1484be9051d0>}}
+Dataset a usar: {'train': <ds.dataset.SegmentationDataset object at 0x1484be925750>, 'val': <ds.dataset.SegmentationDataset object at 0x1484be905190>, 'test': <ds.dataset.SegmentationDataset object at 0x1484be9051d0>}
+Configuración de Entrenamiento:
+  Model: RoiNetResSkip
+  Dataset: FIVES
+  Config File: code/config/config.json
+  Epochs: 300
+  Thresh Value: 100
+  Batch Size: 1
+  Num Workers: 32
+  Learning Rate: 0.0001
+  Weight Decay: 0.001
+  Loss Function: Dice
+  Loss Alpha: 0.2
+  Loss Beta: 0.8
+  Loss Gamma: 0.5
+  Logging Enabled: True
+  Output Prefix: RoiNetResSkip_
+  Augmentation Config: {'enabled': True, 'geometric': False, 'elastic': False, 'intensity_and_color': False, 'gamma': False, 'noise': False, 'otrosfives': True}
+  Restormer Enabled: False
+  Output Directory: run_benchmark_runs/RoiNetResSkip_result_2025-03-17_19-46-44
+Parameters logged to: run_benchmark_runs/RoiNetResSkip_result_2025-03-17_19-46-44/parameters_FIVES_RoiNetResSkip_Dice_True_False.log
+
+Modelo cargado en GPU: RoiNetResSkip(
+  (dict_module): ModuleDict(
+    (conv0): ResidualBlock(
+      (conv1): Conv2d(3, 32, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (the_bn1): BatchNorm2d(3, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(32, 32, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential(
+        (0): Conv2d(3, 32, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (conv1): ResidualBlock(
+      (conv1): Conv2d(32, 64, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (the_bn1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(64, 64, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential(
+        (0): Conv2d(32, 64, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (pool1): Sequential(
+      (0): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (1): Conv2d(64, 128, kernel_size=(1, 1), stride=(1, 1))
+    )
+    (conv2): ResidualBlock(
+      (conv1): Conv2d(128, 128, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (the_bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(128, 128, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential()
+    )
+    (pool2): Sequential(
+      (0): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (1): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+    )
+    (bottle1): ResidualBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (the_bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(256, 256, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential()
+    )
+    (bottle2): ResidualBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (the_bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(256, 256, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential()
+    )
+    (merge2): Sequential(
+      (0): Conv2d(512, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU(inplace=True)
+    )
+    (conv3): ResidualBlock(
+      (conv1): Conv2d(256, 128, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (the_bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(128, 128, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential(
+        (0): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (up3): Sequential(
+      (0): ConvTranspose2d(128, 64, kernel_size=(2, 2), stride=(2, 2))
+    )
+    (merge3): Sequential(
+      (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU(inplace=True)
+    )
+    (conv4): ResidualBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (the_bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(64, 64, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential()
+    )
+    (up4): Sequential(
+      (0): ConvTranspose2d(64, 32, kernel_size=(2, 2), stride=(2, 2))
+    )
+    (merge4): Sequential(
+      (0): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): ReLU(inplace=True)
+    )
+    (conv5): ResidualBlock(
+      (conv1): Conv2d(32, 32, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (the_bn1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (conv2): Conv2d(32, 32, kernel_size=(9, 9), stride=(1, 1), padding=(4, 4), bias=False)
+      (bn2): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (shortcut): Sequential()
+    )
+    (final): Sequential(
+      (0): Conv2d(32, 1, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (1): Sigmoid()
+    )
+  )
+  (res_skip1): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1), bias=False)
+  (res_skip0): Identity()
+  (refine3): Sequential(
+    (0): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+  )
+  (refine4): Sequential(
+    (0): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+    (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+  )
+)
+- Parámetros totales: 30691590
+- Memoria ocupada por modelo en GPU: 117.08 MB
+
+==== Memoria GPU - Después de cargar el modelo en GPU ====
+GPU 0 - Total: 40442.4 MB | Allocated: 118.1 MB | Cached: 144.0 MB
+
+
+USING: Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 118.1 MB | Cached: 144.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 30994.0 MB
+
+Validation Dice: 0.7612934959775051 for Model: RoiNetResSkip_Dice
+New best dice found, evaluating on test set...
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 30994.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7942146759530497 for Model: RoiNetResSkip_Dice
+New best dice found, evaluating on test set...
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7699957528639546 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8050456277513177 for Model: RoiNetResSkip_Dice
+New best dice found, evaluating on test set...
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7695416267405493 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7383061029347355 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7636514637969452 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7576822280790455 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7692700681761487 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7031544818112739 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7943953255855196 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7288738561661019 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.747716873495367 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7498025119190779 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7467057615506014 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7897113292211723 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7643617828346415 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8298067274571796 for Model: RoiNetResSkip_Dice
+New best dice found, evaluating on test set...
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8193002901441375 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8150492039530621 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8225327335423224 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.807703913905857 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8081983227778378 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7628090262854333 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8265412347236197 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7853903518568425 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7568158508997296 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.799725895154077 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7853487261286958 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7952759981004505 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8521531477002313 for Model: RoiNetResSkip_Dice
+New best dice found, evaluating on test set...
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7365538638365029 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8491052070007586 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7701772239114749 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8358152592878426 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7794598758109821 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8180793334554565 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7772567062659476 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7866314007790149 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7572155208256274 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8235066561106047 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8593703978025289 for Model: RoiNetResSkip_Dice
+New best dice found, evaluating on test set...
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8531073683128104 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8518947838760006 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8139747745634089 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8422235519991228 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8378168981092681 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8282755126206414 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7824913654501112 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8479231724667725 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8280772637587661 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8176314749694761 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7938574355458383 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.7962420711387392 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8451491902470504 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8534328612516987 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8503166000608469 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8240477932247775 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8607269518521811 for Model: RoiNetResSkip_Dice
+New best dice found, evaluating on test set...
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8153270695564977 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8384620651861169 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.830893428757657 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8276285689704105 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8325255108075191 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8664115106865015 for Model: RoiNetResSkip_Dice
+New best dice found, evaluating on test set...
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8247209188693925 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 31278.0 MB
+
+Validation Dice: 0.8162314589348253 for Model: RoiNetResSkip_Dice
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 40442.4 MB | Allocated: 474.5 MB | Cached: 3300.0 MB
+
