@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH -J RoiNetMultiSkip__      # Nombre del trabajo
-#SBATCH -o RoiNetMultiSkip__output%j.log   # Archivo para la salida estándar (%j expande al JobID)
-#SBATCH -e RoiNetMultiSkip__error%j.log    # Archivo para la salida de errores
+#SBATCH -J OwnClassRoiRoiNetNoSkip__      # Nombre del trabajo
+#SBATCH -o OwnClassRoiRoiNetNoSkip__output%j.log   # Archivo para la salida estándar (%j expande al JobID)
+#SBATCH -e OwnClassRoiRoiNetNoSkip__error%j.log    # Archivo para la salida de errores
 #SBATCH --gres=gpu:a100:1        # Solicita GPU A100
 #SBATCH -c 32                    # 32 núcleos de CPU
 #SBATCH --mem=32G                # Memoria total
 #SBATCH -p medium
-#SBATCH -t 20:00:00              # Tiempo máximo de ejecución
+#SBATCH -t 10:00:00              # Tiempo máximo de ejecución
 
 # Cargar módulos necesarios
 module load cesga/2020
@@ -19,7 +19,7 @@ cd /mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fork-roi/fivesegmentor
 source venv/bin/activate
 
 # User-defined configuration variables
-MODEL="RoiNetMultiSkip"
+MODEL="RoiRoiNetNoSkip"
 DATASET="FIVES"
 CONFIG="code/config/config.json"
 EPOCHS=300
@@ -29,7 +29,7 @@ NUM_WORKERS=32
 LR=1e-4
 WEIGHT_DECAY=0.001
 LOGGING="True"
-OUTPUT_PREFIX="RoiNetMultiSkip_"
+OUTPUT_PREFIX="OwnClass_RoiRoiNetNoSkip_"
 THRESH_VALUE=100
 
 # Loss function variables

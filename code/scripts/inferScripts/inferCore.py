@@ -12,7 +12,7 @@ from sklearn.metrics import roc_auc_score, f1_score, accuracy_score, recall_scor
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 # Importar los modelos y bloques comunes.
-from models.roinet import RoiNetTest1bottleneck, RoiNetTest2bottleneck, RoiNetTest3bottleneck
+from models.roinet import *
 from models.common import ResidualBlock, SimpleResBlock  # Asegúrate de que estos bloques existan
 
 def compute_dice(pred, gt, eps=1e-6):
@@ -54,8 +54,21 @@ def run_inference_on_directory(image_dir, label_dir, output_dir, model_config, m
         ModelClass = RoiNetTest2bottleneck
     elif model_type == "RoiNetTest3bottleneck":
         ModelClass = RoiNetTest3bottleneck
+    elif model_type == "RoiNetNoSkip":
+        ModelClass = RoiNetNoSkip
+    elif model_type == "RoiNetSumFusion":
+        ModelClass = RoiNetSumFusion
+    elif model_type == "RoiNetAttnSkip":
+        ModelClass = RoiNetAttnSkip
+    elif model_type == "RoiNetResSkip":
+        ModelClass = RoiNetResSkip
+    elif model_type == "RoiNetConcatPlus":
+        ModelClass = RoiNetConcatPlus
+    elif model_type == "RoiNetMultiSkip":
+        ModelClass = RoiNetMultiSkip
     else:
         raise ValueError(f"Tipo de modelo desconocido: {model_type}")
+
     
     # Seleccionar los bloques a usar según la configuración
     block_name_init = model_config["cls_init_block"]
