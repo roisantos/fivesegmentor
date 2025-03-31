@@ -13,6 +13,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../.
 
 # Importar los modelos y bloques comunes.
 from models.roinet import *
+from models.extraModels import * 
 from models.common import ResidualBlock, SimpleResBlock  # Asegúrate de que estos bloques existan
 
 def compute_dice(pred, gt, eps=1e-6):

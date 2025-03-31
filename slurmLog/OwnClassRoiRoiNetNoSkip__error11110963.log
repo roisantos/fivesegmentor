@@ -1,8 +1,0 @@
-cesga/2020 unloaded
-        Preparing the environment for use of the CESGA 2020 software stack.
-        Please rebuild modules cache: module --ignore-cache avail
-     
-cesga/2020 loaded
-python/3.9.9 loaded
-jupyter-server/1.13.5-python-3.9.9 loaded
-jupyterlab/3.2.4-python-3.9.9 loaded

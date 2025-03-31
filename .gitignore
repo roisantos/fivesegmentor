@@ -12,6 +12,7 @@ tfg
 log
 __pycache__
 test_runs
+runs/
 runs
 venv
 venv/

@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH -J OwnClassRoiRoiNetNoSkip__      # Nombre del trabajo
-#SBATCH -o OwnClassRoiRoiNetNoSkip__output%j.log   # Archivo para la salida estándar (%j expande al JobID)
-#SBATCH -e OwnClassRoiRoiNetNoSkip__error%j.log    # Archivo para la salida de errores
+#SBATCH -J ${OUTPUT_PREFIX}      
+#SBATCH -o runs/${OUTPUT_PREFIX}/job_output_%j.log  
+#SBATCH -e runs/${OUTPUT_PREFIX}/job_error_%j.log  
 #SBATCH --gres=gpu:a100:1        # Solicita GPU A100
 #SBATCH -c 32                    # 32 núcleos de CPU
 #SBATCH --mem=32G                # Memoria total
-#SBATCH -p medium
-#SBATCH -t 10:00:00              # Tiempo máximo de ejecución
+#SBATCH -p short
+#SBATCH -t 00:20:00              # Tiempo máximo de ejecución
 
 # Cargar módulos necesarios
 module load cesga/2020
@@ -18,9 +18,10 @@ module load python/3.9.9
 cd /mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fork-roi/fivesegmentor
 source venv/bin/activate
 
+
 # User-defined configuration variables
-MODEL="RoiRoiNetNoSkip"
-DATASET="FIVES"
+MODEL="RoiNetNoSkip"
+DATASET="FIVES512"
 CONFIG="code/config/config.json"
 EPOCHS=300
 EARLY_STOP=100
@@ -29,7 +30,7 @@ NUM_WORKERS=32
 LR=1e-4
 WEIGHT_DECAY=0.001
 LOGGING="True"
-OUTPUT_PREFIX="OwnClass_RoiRoiNetNoSkip_"
+OUTPUT_PREFIX="FirstTest_"
 THRESH_VALUE=100
 
 # Loss function variables
@@ -49,6 +50,13 @@ AUGMENT_NOISE="False"
 
 # Restormer
 RESTORMER="False"
+
+
+
+
+
+mkdir -p runs/${OUTPUT_PREFIX}
+echo "Output directory: runs/${OUTPUT_PREFIX}"
 
 
 

@@ -24,6 +24,7 @@ from utils.utils import *
 from models.common import *
 from models.frnet import *
 from models.roinet import *
+from models.extraModels import * 
 
 # Initialize SummaryWriter for TensorBoard
 #writer = SummaryWriter()
@@ -584,7 +585,7 @@ if __name__ == "__main__":
 
     #Setting up the writer for the logs
     timestamp = dt.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    global_output_dir = os.path.join("run_benchmark_runs", f"{args.output_prefix}result_{timestamp}")
+    global_output_dir = os.path.join("runs", f"{args.output_prefix}")
     os.makedirs(global_output_dir, exist_ok=True)
     writer = SummaryWriter(log_dir=global_output_dir)
     set_writer(writer)
