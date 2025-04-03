@@ -15,6 +15,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../.
 from models.roinet import *
 from models.extraModels import * 
 from models.common import ResidualBlock, SimpleResBlock  # Asegúrate de que estos bloques existan
+from models.SantosNet import *
 
 def compute_dice(pred, gt, eps=1e-6):
     """Calcula el coeficiente Dice a partir de arrays binarios (numpy) de predicción y ground truth."""
@@ -67,6 +68,12 @@ def run_inference_on_directory(image_dir, label_dir, output_dir, model_config, m
         ModelClass = RoiNetConcatPlus
     elif model_type == "RoiNetMultiSkip":
         ModelClass = RoiNetMultiSkip
+    elif model_type == "SantosNet_GCh":
+        ModelClass = SantosNet_GCh
+    elif model_type == "SantosNet_PCh":
+        ModelClass = SantosNet_PCh
+    elif model_type == "SantosNet_CPCh":
+        ModelClass = SantosNet_CPCh
     else:
         raise ValueError(f"Tipo de modelo desconocido: {model_type}")
 
@@ -89,7 +96,17 @@ def run_inference_on_directory(image_dir, label_dir, output_dir, model_config, m
         raise ValueError(f"Bloque convolucional desconocido: {block_name_conv}")
     
     # Instanciar el modelo con los parámetros: canales de entrada/salida, kernel=9 y bloques seleccionados.
-    model = ModelClass(ch_in=model_config["ch_in"],
+    
+
+    if "custom_weights" in model_config:
+         model = ModelClass(ch_in=model_config["ch_in"],
+                       ch_out=model_config["ch_out"],
+                       k_size=9,
+                       custom_weights=model_config["custom_weights"],
+                       cls_init_block=BlockInit,
+                       cls_conv_block=BlockConv)
+    else:
+        model = ModelClass(ch_in=model_config["ch_in"],
                        ch_out=model_config["ch_out"],
                        k_size=9,
                        cls_init_block=BlockInit,

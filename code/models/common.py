@@ -300,3 +300,39 @@ class AttentionGate(nn.Module):
         psi = self.relu(g1 + x1)
         psi = self.psi(psi)
         return x * psi
+
+
+
+########################################################################
+#                      Modules for SantosNet
+########################################################################
+
+class GreenChannelBlock(nn.Module):
+    def __init__(self):
+        super(GreenChannelBlock, self).__init__()
+    def forward(self, x):
+        # x is assumed to have shape (B, 3, H, W)
+        return x[:, 1:2, :, :]  # Select channel 1 and keep the channel dimension
+
+# Module that fuses 3 channels to 1 using a learnable 1x1 convolution.
+class LearnableFusionBlock(nn.Module):
+    def __init__(self):
+        super(LearnableFusionBlock, self).__init__()
+        self.conv = nn.Conv2d(3, 1, kernel_size=1, bias=True)
+    def forward(self, x):
+        return self.conv(x)
+
+# Module that fuses 3 channels to 1 using fixed, custom weights.
+class CustomFusionBlock(nn.Module):
+    def __init__(self, weights):
+        """
+        weights: a list or tuple of 3 numbers, e.g. [0.1, 0.8, 0.1]
+        """
+        super(CustomFusionBlock, self).__init__()
+        # Convert weights to a tensor and register as a buffer so they are not updated
+        self.register_buffer("weights", torch.tensor(weights, dtype=torch.float32).view(1, 3, 1, 1))
+    def forward(self, x):
+        # Multiply input channels by the fixed weights and sum along the channel dimension.
+        # x has shape (B, 3, H, W)
+        fused = (x * self.weights).sum(dim=1, keepdim=True)
+        return fused

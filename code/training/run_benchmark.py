@@ -25,6 +25,7 @@ from models.common import *
 from models.frnet import *
 from models.roinet import *
 from models.extraModels import * 
+from models.SantosNet import *
 
 # Initialize SummaryWriter for TensorBoard
 #writer = SummaryWriter()
@@ -209,6 +210,35 @@ def load_models_from_json(config_path):
                 cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
                 cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
             )
+        elif model_config["type"] == "SantosNet_GCh":
+            models[new_name] = lambda mc=model_config: SantosNet_GCh(
+                ch_in=mc.get("ch_in", 3),
+                ch_out=mc.get("ch_out", 1),
+                ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),
+                k_size=mc.get("k_size", 9),
+                cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
+                cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
+            )
+        elif model_config["type"] == "SantosNet_PCh":
+            models[new_name] = lambda mc=model_config: SantosNet_PCh(
+                ch_in=mc.get("ch_in", 3),
+                ch_out=mc.get("ch_out", 1),
+                ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),
+                k_size=mc.get("k_size", 9),
+                cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
+                cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock"))
+            )
+        elif model_config["type"] == "SantosNet_CPCh":
+            models[new_name] = lambda mc=model_config: SantosNet_CPCh(
+                ch_in=mc.get("ch_in", 3),
+                ch_out=mc.get("ch_out", 1),
+                ls_mid_ch=mc.get("ls_mid_ch", [32, 64, 128, 128, 64, 32]),
+                k_size=mc.get("k_size", 9),
+                cls_init_block=eval(mc.get("cls_init_block", "ResidualBlock")),
+                cls_conv_block=eval(mc.get("cls_conv_block", "ResidualBlock")),
+                custom_weights=mc.get("custom_weights", [0.1, 0.8, 0.1])
+            )
+
 
 
             

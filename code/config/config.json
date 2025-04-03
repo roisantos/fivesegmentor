@@ -326,6 +326,74 @@
       "k_size": 9,
       "cls_init_block": "ResidualBlock",
       "cls_conv_block": "ResidualBlock"
+    },
+    "SantosNet_GCh": {
+      "type": "SantosNet_GCh",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "SantosNet_PCh": {
+      "type": "SantosNet_PCh",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "SantosNet_CPCh": {
+      "type": "SantosNet_CPCh",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock",
+      "custom_weights": [0.1, 0.8, 0.1]
+    },
+    "SantosNet_CPCh_variant1": {
+      "type": "SantosNet_CPCh",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock",
+      "custom_weights": [0.2, 0.8, 0.0]
+    },
+    "SantosNet_CPCh_variant2": {
+      "type": "SantosNet_CPCh",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock",
+      "custom_weights": [0.3, 0.6, 0.1]
+    },
+    "SantosNet_CPCh_variant3": {
+      "type": "SantosNet_CPCh",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock",
+      "custom_weights": [0.33, 0.34, 0.33]
+    },
+    "SantosNet_CPCh_variant4": {
+      "type": "SantosNet_CPCh",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock",
+      "custom_weights": [0.3, 0.7, 0.0]
     }
 
 
