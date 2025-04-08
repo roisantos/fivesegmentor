@@ -44,7 +44,7 @@ class SoftCLDiceLoss(nn.Module):
            " tsens: Sensibilidad, que es la suma del producto entre el esqueleto de la ground truth y y_pred, normalizada.
       4. Se computa clDice como 1  2*(tprec*tsens)/(tprec+tsens).
     """
-    def __init__(self, iter_=20, smooth=1., exclude_background=False):
+    def __init__(self, iter_=20, smooth=0.0001, exclude_background=False):
         super(SoftCLDiceLoss, self).__init__()
         self.iter = iter_
         self.smooth = smooth
@@ -168,3 +168,58 @@ class FocalTverskyLoss(nn.Module):
         focal_tversky_loss = (1 - tversky) ** self.gamma
 
         return focal_tversky_loss
+
+
+
+class ConexLoss(nn.Module):
+    """
+    Pérdida para penalizar desconexiones, especialmente sensibles a pequeñas discontinuidades 
+    en la segmentación de vasos sanguíneos de fondo de ojo.
+    
+    En esta versión se calcula el gradiente (diferencia entre píxeles vecinos) de la predicción.
+    Se espera que en zonas donde el ground truth indique la presencia de un vaso (valor 1) la
+    predicción sea suave; transiciones bruscas se traducen en gradientes altos y se penalizan.
+    
+    Parámetros:
+      - reduction: Método para reducir la pérdida ('mean' o 'sum').
+    """
+    def __init__(self, reduction='mean'):
+        super(ConexLoss, self).__init__()
+        self.reduction = reduction
+        
+    def forward(self, pred, label):
+        """
+        Calcula la pérdida de conectividad penalizando gradientes altos en las regiones donde se esperan vasos.
+        
+        Entradas:
+          pred: Tensor predicho de forma (B, 1, H, W), con valores en [0, 1].
+          label: Tensor ground truth de forma (B, 1, H, W), idealmente binario.
+        
+        Salida:
+          Un escalar que representa la pérdida. Los gradientes altos en regiones de vasos (label==1)
+          se penalizan.
+        """
+        # Asegurarse de que pred y label tengan la misma forma
+        assert pred.shape == label.shape, "La forma de pred y label debe ser la misma."
+        
+        # Calcular el gradiente horizontal (diferencia entre píxeles adyacentes en la dirección X)
+        grad_x = pred[:, :, :, 1:] - pred[:, :, :, :-1]
+        # Calcular el gradiente vertical (diferencia entre píxeles adyacentes en la dirección Y)
+        grad_y = pred[:, :, 1:, :] - pred[:, :, :-1, :]
+
+        # Se aplica padding para mantener el mismo tamaño en ambas direcciones
+        grad_x = F.pad(grad_x, (0, 1, 0, 0), mode='replicate')
+        grad_y = F.pad(grad_y, (0, 0, 0, 1), mode='replicate')
+        
+        # Calcular la magnitud del gradiente
+        grad_mag = torch.sqrt(grad_x**2 + grad_y**2 + 1e-12)
+        
+        # Penalizamos los gradientes altos en las regiones donde se espera vaso (label==1)
+        loss = grad_mag * label
+        
+        if self.reduction == 'mean':
+            loss = loss.mean()
+        elif self.reduction == 'sum':
+            loss = loss.sum()
+        
+        return loss
