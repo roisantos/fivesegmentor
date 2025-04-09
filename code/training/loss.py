@@ -4,6 +4,43 @@ import torch.nn.functional as F
 from .soft_skeleton import SoftSkeletonize
 
 
+
+class CompositeLoss(nn.Module):
+    """
+    CompositeLoss combines multiple loss functions into a single loss value via weighting.
+    
+    The user should pass a list (or tuple) of pairs:
+    
+         [(loss_fn1, weight1), (loss_fn2, weight2), ...]
+         
+    where each "loss_fn" is an instantiated loss function (e.g., DiceLoss(), SoftCLDiceLoss(), etc.)
+    and "weight" is the corresponding weighting factor for that loss.
+    
+    In the forward() method, each loss is computed and added up according to its weight.
+    """
+    def __init__(self, losses):
+        """
+        Args:
+            losses (list or tuple): List of pairs (loss_function, weight).
+                                     Example: [(DiceLoss(), 0.4),
+                                               (SoftCLDiceLoss(iter_=20, smooth=1e-12, exclude_background=True), 0.3),
+                                               (FocalTverskyLoss(alpha=0.2, beta=0.8, gamma=0.5), 0.3)]
+        """
+        super(CompositeLoss, self).__init__()
+        if not isinstance(losses, (list, tuple)):
+            raise ValueError("Expected 'losses' to be a list or tuple of (loss_function, weight) pairs.")
+        self.losses = losses
+
+    def forward(self, predict, target):
+        total_loss = 0.0
+        for loss_fn, weight in self.losses:
+            loss_val = loss_fn(predict, target)
+            total_loss += weight * loss_val
+        return total_loss
+
+
+        
+
 class DiceLoss(nn.Module):
 
     def forward(self, predict, target):
@@ -44,7 +81,7 @@ class SoftCLDiceLoss(nn.Module):
            " tsens: Sensibilidad, que es la suma del producto entre el esqueleto de la ground truth y y_pred, normalizada.
       4. Se computa clDice como 1  2*(tprec*tsens)/(tprec+tsens).
     """
-    def __init__(self, iter_=20, smooth=0.0001, exclude_background=False):
+    def __init__(self, iter_=20, smooth=0.000001, exclude_background=False):
         super(SoftCLDiceLoss, self).__init__()
         self.iter = iter_
         self.smooth = smooth
@@ -223,3 +260,39 @@ class ConexLoss(nn.Module):
             loss = loss.sum()
         
         return loss
+
+
+
+class SoftCLDiceLossStrict(nn.Module):
+    """
+    Versión más estricta de SoftCLDiceLoss.
+    Penaliza con mayor fuerza los errores estructurales usando una potencia sobre el harmonic mean.
+    """
+    def __init__(self, iter_=25, smooth=1e-6, penalty_power=1.5, exclude_background=False):
+        super(SoftCLDiceLossStrict, self).__init__()
+        self.iter = iter_
+        self.smooth = smooth
+        self.penalty_power = penalty_power
+        self.soft_skeletonize = SoftSkeletonize(num_iter=self.iter)
+        self.exclude_background = exclude_background
+
+    def forward(self, y_true, y_pred):
+        y_true = y_true.float()
+        y_pred = y_pred.float()
+
+        if self.exclude_background and y_true.shape[1] > 1:
+            y_true = y_true[:, 1:, :, :]
+            y_pred = y_pred[:, 1:, :, :]
+
+        skel_pred = self.soft_skeletonize(y_pred)
+        skel_true = self.soft_skeletonize(y_true)
+
+        tprec = (torch.sum(skel_pred * y_true) + self.smooth) / (torch.sum(skel_pred) + self.smooth)
+        tsens = (torch.sum(skel_true * y_pred) + self.smooth) / (torch.sum(skel_true) + self.smooth)
+
+        harmonic = 2.0 * (tprec * tsens) / (tprec + tsens + self.smooth)
+
+        # Penalizar errores estructurales con más severidad
+        cl_dice = 1. - harmonic.pow(self.penalty_power)
+
+        return cl_dice
