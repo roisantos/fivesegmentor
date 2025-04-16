@@ -268,7 +268,7 @@ class SoftCLDiceLossStrict(nn.Module):
     Versión más estricta de SoftCLDiceLoss.
     Penaliza con mayor fuerza los errores estructurales usando una potencia sobre el harmonic mean.
     """
-    def __init__(self, iter_=25, smooth=1e-6, penalty_power=1.5, exclude_background=False):
+    def __init__(self, iter_=25, smooth=1e-6, penalty_power=5., exclude_background=False):
         super(SoftCLDiceLossStrict, self).__init__()
         self.iter = iter_
         self.smooth = smooth

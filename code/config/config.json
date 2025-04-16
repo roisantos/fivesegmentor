@@ -394,8 +394,19 @@
       "cls_init_block": "ResidualBlock",
       "cls_conv_block": "ResidualBlock",
       "custom_weights": [0.3, 0.7, 0.0]
+    },
+    "SantosNet_GCh_lite": {
+      "type": "SantosNet_GCh_lite",
+      "ch_out": 1,
+      "ls_mid_ch": [16, 32, 64, 64, 32, 16],
+      "k_size": 3
+    },
+    "SantosNet_GCh_lite_v2": {
+      "type": "SantosNet_GCh_lite_v2",
+      "ch_out": 1,
+      "ls_mid_ch": [16, 32, 64, 64, 32, 16],
+      "k_size": 3
     }
-
 
     
   },
