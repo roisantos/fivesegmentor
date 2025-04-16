@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # ==== Userdefined variables ====
-OUTPUT_PREFIX="DirPCh"
-MODEL="SantosNet_PCh"  # Using the learnable channel fusion model
+OUTPUT_PREFIX="DirRN"
+MODEL="RoiNet7"  # Using the learnable channel fusion model
 DATASET="FIVES"
 CONFIG="code/config/config.json"
 EPOCHS=300
