@@ -360,3 +360,159 @@ class SanLoss(nn.Module):
         focal_tversky_loss = (1 - tversky) ** self.gamma
         
         return focal_tversky_loss
+
+class DirectionalSanLoss(nn.Module):
+    """
+    DirectionalSanLoss: Direction-weighted focal Tversky loss for vessel segmentation.
+    
+    This loss function extends the FocalTverskyLoss by incorporating directional
+    information to give higher weight to pixels along vessel continuity paths.
+    This helps improve segmentation of fragmented vessels by encouraging continuity
+    in the direction of vessel structures.
+    
+    Parameters:
+        alpha: Weight for false positives.
+        beta: Weight for false negatives.
+               Typically, for vessel segmentation, you may set beta > alpha.
+        gamma: Focusing parameter to emphasize misclassified pixels.
+        direction_weight: Weight for the directional component (0.0 to disable).
+        kernel_size: Size of kernel used for direction calculation (3, 5, or 7).
+        smooth: Smoothing constant to avoid division by zero.
+    """
+    def __init__(self, alpha=0.2, beta=0.8, gamma=0.5, direction_weight=0.7, kernel_size=5, smooth=1e-6):
+        super(DirectionalSanLoss, self).__init__()
+        self.alpha = alpha
+        self.beta = beta
+        self.gamma = gamma
+        self.direction_weight = direction_weight
+        self.kernel_size = kernel_size
+        self.smooth = smooth
+        
+        # Create Sobel kernels for gradient calculation
+        self.register_buffer('sobel_x', torch.tensor([
+            [-1, 0, 1],
+            [-2, 0, 2],
+            [-1, 0, 1]
+        ], dtype=torch.float32).view(1, 1, 3, 3))
+        
+        self.register_buffer('sobel_y', torch.tensor([
+            [-1, -2, -1],
+            [0, 0, 0],
+            [1, 2, 1]
+        ], dtype=torch.float32).view(1, 1, 3, 3))
+
+    def calculate_direction_map(self, y_true):
+        """
+        Calculate directional coherence map from the ground truth vessel mask.
+        
+        This function:
+        1. Calculates gradient direction for vessel pixels
+        2. Creates a direction field tensor that emphasizes vessel continuity
+        3. Returns a normalized map with higher values along vessel paths
+        
+        Args:
+            y_true: Ground truth tensor of shape (B, C, H, W)
+            
+        Returns:
+            Directional weight map of same shape as y_true
+        """
+        # If batch has multiple channels, use only the first one
+        if y_true.shape[1] > 1:
+            vessel_mask = y_true[:, 0:1, :, :]
+        else:
+            vessel_mask = y_true
+            
+        batch_size, channels, height, width = vessel_mask.shape
+        
+        # Calculate gradients using Sobel operators
+        # Pad input to avoid boundary artifacts
+        padded = F.pad(vessel_mask, (1, 1, 1, 1), mode='replicate')
+        
+        # Apply Sobel filters
+        grad_x = F.conv2d(padded, self.sobel_x.expand(channels, 1, 3, 3), groups=channels)
+        grad_y = F.conv2d(padded, self.sobel_y.expand(channels, 1, 3, 3), groups=channels)
+        
+        # Calculate gradient magnitude and direction
+        magnitude = torch.sqrt(grad_x**2 + grad_y**2 + self.smooth)
+        direction = torch.atan2(grad_y, grad_x)  # Direction in radians
+        
+        # Create direction coherence field
+        # For each pixel, look in neighborhood and weight by directional similarity
+        direction_weight_map = torch.zeros_like(vessel_mask)
+        
+        # Only process pixels where vessel is present
+        vessel_pixels = (vessel_mask > 0.5)
+        
+        # Create a coherence field based on directional similarity
+        # Higher value means more aligned with vessel direction
+        k_size = self.kernel_size
+        half_k = k_size // 2
+        
+        # For each vessel pixel, enhance weighting along vessel direction
+        for b in range(batch_size):
+            for y in range(half_k, height - half_k):
+                for x in range(half_k, width - half_k):
+                    if vessel_pixels[b, 0, y, x]:
+                        # Get direction at current pixel
+                        current_dir = direction[b, 0, y, x]
+                        
+                        # Calculate coherence in the neighborhood
+                        for dy in range(-half_k, half_k + 1):
+                            for dx in range(-half_k, half_k + 1):
+                                # Skip the center pixel
+                                if dy == 0 and dx == 0:
+                                    continue
+                                    
+                                # Skip pixels outside the vessel mask
+                                if not vessel_pixels[b, 0, y + dy, x + dx]:
+                                    continue
+                                
+                                # Calculate angle between current direction and direction to neighbor
+                                neighbor_dir = direction[b, 0, y + dy, x + dx]
+                                dir_diff = torch.abs(current_dir - neighbor_dir)
+                                dir_diff = torch.min(dir_diff, 2 * torch.pi - dir_diff)  # Handle angle wrap-around
+                                
+                                # Calculate directional similarity (higher when directions are aligned)
+                                similarity = torch.cos(dir_diff)
+                                
+                                # Weight by distance (closer pixels have more influence)
+                                distance = torch.sqrt(torch.tensor(dx**2 + dy**2, dtype=torch.float32, device=vessel_mask.device))
+                                weight = similarity * (1.0 / (distance + self.smooth))
+                                
+                                # Add to direction weight map
+                                direction_weight_map[b, 0, y, x] += weight
+        
+        # Normalize the direction weight map
+        if direction_weight_map.max() > direction_weight_map.min():
+            direction_weight_map = (direction_weight_map - direction_weight_map.min()) / (direction_weight_map.max() - direction_weight_map.min())
+        
+        return direction_weight_map
+
+    def forward(self, y_pred, y_true):
+        """
+        y_pred: Predicted probabilities (after sigmoid/softmax) of shape (B, C, H, W).
+        y_true: Ground truth mask of the same shape.
+        """
+        # Calculate directional weight map from ground truth
+        direction_map = self.calculate_direction_map(y_true)
+        
+        # Flatten the tensors for Tversky calculation
+        y_pred_flat = y_pred.contiguous().view(-1)
+        y_true_flat = y_true.contiguous().view(-1)
+        direction_map_flat = direction_map.contiguous().view(-1)
+        
+        # Compute true positives, false positives and false negatives
+        TP = (y_true_flat * y_pred_flat).sum()
+        FP = ((1 - y_true_flat) * y_pred_flat).sum()
+        
+        # Weight false negatives with directional map
+        # Areas with high directional continuity get higher weight
+        weighted_fn = (y_true_flat * (1 - y_pred_flat) * (1 + self.direction_weight * direction_map_flat)).sum()
+        
+        # Compute the weighted Tversky index
+        tversky = (TP + self.smooth) / (TP + self.alpha * FP + self.beta * weighted_fn + self.smooth)
+        
+        # Compute the Focal Tversky loss with directional weighting
+        focal_tversky_loss = (1 - tversky) ** self.gamma
+        
+        return focal_tversky_loss
