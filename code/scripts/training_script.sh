@@ -20,7 +20,7 @@ LOSS="Dice"
 #Parameters for FocalTversky
 ALPHA=0.2
 BETA=0.8
-GAMMA=0.5
+GAMMA=1.5
 
 # Augmentation variables
 AUGMENT_OTROSFIVES="True" 
