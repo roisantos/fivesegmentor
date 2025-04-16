@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # ==== Userdefined variables ====
-OUTPUT_PREFIX="RoiNet7FT_FIVES"
-MODEL="RoiNet7"
+OUTPUT_PREFIX="PChFTg1.5"
+MODEL="SantosNet_PCh"
 DATASET="FIVES"
 CONFIG="code/config/config.json"
 EPOCHS=300
