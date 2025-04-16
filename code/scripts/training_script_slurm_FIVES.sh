@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # ==== Userdefined variables ====
-OUTPUT_PREFIX="RoiNetTest2bottleneck_20hour"
-MODEL="RoiNetTest2bottleneck"
+OUTPUT_PREFIX="RoiNet7FT_FIVES"
+MODEL="RoiNet7"
 DATASET="FIVES"
 CONFIG="code/config/config.json"
 EPOCHS=300
@@ -15,8 +15,8 @@ LOGGING="True"
 THRESH_VALUE=100
 
 
-LOSS="Dice"
-ALPHA=0.2; BETA=0.8; GAMMA=0.5
+LOSS="FocalTversky"
+ALPHA=0.2; BETA=0.8; GAMMA=1.5
 
 AUGMENT_OTROSFIVES="True"
 AUGMENT_GEOMETRIC="False"
@@ -41,7 +41,7 @@ cat <<EOF > "${SBATCH_FILE}"
 #SBATCH -c 32
 #SBATCH --mem=32G
 #SBATCH -p short
-#SBATCH -t 20:00:00
+#SBATCH -t 3-00:00:00
 
 module load cesga/2020
 module load python/3.9.9

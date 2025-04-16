@@ -2,7 +2,7 @@
 # Example training launch script
 
 # User-defined configuration variables
-MODEL="SantosNet_GCh"
+MODEL="RoiNet7"
 DATASET="FIVES"
 CONFIG="code/config/config.json"
 EPOCHS=300
@@ -12,11 +12,11 @@ NUM_WORKERS=32
 LR=1e-4
 WEIGHT_DECAY=0.001
 LOGGING="True"
-OUTPUT_PREFIX="Test_SantosNet_GCh_"
+OUTPUT_PREFIX="FT_RoiNet7_FIVES_"
 THRESH_VALUE=100
 
 # Loss function variables
-LOSS="Dice"
+LOSS="FocalTversky"
 #Parameters for FocalTversky
 ALPHA=0.2
 BETA=0.8
