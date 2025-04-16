@@ -360,6 +360,9 @@ def train_and_evaluate(model_name, dataset, logging_enabled=False):
         #print("USING: FocalTverskyLoss")
         funcLoss = FocalTverskyLoss(alpha=args.alpha, beta=args.beta, gamma=args.gamma, smooth=1e-6)
         print(f"USANDO: FocalTverskyLoss con alpha={args.alpha}, beta={args.beta}, gamma={args.gamma}")
+    elif loss_function == "SanLoss":
+        funcLoss = SanLoss(alpha=args.alpha, beta=args.beta, gamma=args.gamma, entropy_weight=args.entropy_weight, smooth=1e-6)
+        print(f"USANDO: SanLoss con alpha={args.alpha}, beta={args.beta}, gamma={args.gamma}, entropy_weight={args.entropy_weight}")
     else:
         raise ValueError(f"Loss function '{loss_function}' no reconocida")
 
@@ -549,7 +552,7 @@ if __name__ == "__main__":
     parser.add_argument("--num_workers", type=int, default=32, help="Number of DataLoader workers")
     parser.add_argument("--lr", type=float, default=1e-4, help="Learning rate")
     parser.add_argument("--weight_decay", type=float, default=0.001, help="Weight decay")
-    parser.add_argument("--loss", type=str, default="Dice", choices=["Dice", "clDice", "soft_dice_cldice", "FocalTversky"],
+    parser.add_argument("--loss", type=str, default="Dice", choices=["Dice", "clDice", "soft_dice_cldice", "FocalTversky", "SanLoss"],
                         help="Loss function to use")
     parser.add_argument("--logging", type=str2bool, default=True, help="Enable TensorBoard logging")
     parser.add_argument("--output_prefix", type=str, default="", help="Prefix for the output folder")
@@ -566,6 +569,7 @@ if __name__ == "__main__":
     parser.add_argument("--alpha", type=float, default=0.2,help="Valor de alpha (TP) para Focal Tversky Loss. Sugerido entre 0.2 y 0.3")
     parser.add_argument("--beta", type=float, default=0.8, help="Valor de beta (FN) para Focal Tversky Loss. Sugerido entre 0.7 y 0.8")
     parser.add_argument("--gamma", type=float, default=0.5, help="Valor de gamma (parámetro de foco) para Focal Tversky Loss. Sugerido comenzar en 0.5")
+    parser.add_argument("--entropy_weight", type=float, default=0.5, help="Weight for entropy map in SanLoss. Higher values increase focus on uncertain regions.")
 
 
     parser.add_argument("--restormer", type=str2bool, default=False, help="Enable restormer")

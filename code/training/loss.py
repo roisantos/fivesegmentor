@@ -296,3 +296,67 @@ class SoftCLDiceLossStrict(nn.Module):
         cl_dice = 1. - harmonic.pow(self.penalty_power)
 
         return cl_dice
+
+class SanLoss(nn.Module):
+    """
+    SanLoss: Entropy-weighted focal Tversky loss for vessel segmentation.
+    
+    This loss function extends the FocalTverskyLoss by incorporating an entropy map
+    to give higher weight to high-uncertainty regions during training. This helps
+    to improve segmentation in areas with vessel discontinuities and fine details.
+    
+    Parameters:
+        alpha: Weight for false positives.
+        beta: Weight for false negatives.
+               Typically, for vessel segmentation, you may set beta > alpha.
+        gamma: Focusing parameter to emphasize misclassified pixels.
+        entropy_weight: Weight for the entropy component (0.0 to disable).
+        smooth: Smoothing constant to avoid division by zero.
+    """
+    def __init__(self, alpha=0.2, beta=0.8, gamma=0.5, entropy_weight=0.5, smooth=1e-6):
+        super(SanLoss, self).__init__()
+        self.alpha = alpha
+        self.beta = beta
+        self.gamma = gamma
+        self.entropy_weight = entropy_weight
+        self.smooth = smooth
+
+    def forward(self, y_pred, y_true):
+        """
+        y_pred: Predicted probabilities (after sigmoid/softmax) of shape (B, C, H, W).
+        y_true: Ground truth mask of the same shape.
+        """
+        # Keep the original shape for entropy calculation
+        original_shape = y_pred.shape
+        
+        # Calculate entropy map: higher values for uncertain predictions
+        # Entropy is highest when prediction is around 0.5 (uncertain)
+        entropy_map = -y_pred * torch.log(y_pred + 1e-7) - (1-y_pred) * torch.log(1-y_pred + 1e-7)
+        
+        # Normalize entropy map to [0, 1] range
+        if entropy_map.max() > entropy_map.min():
+            entropy_map = (entropy_map - entropy_map.min()) / (entropy_map.max() - entropy_map.min())
+        
+        # Flatten the tensors for Tversky calculation
+        y_pred_flat = y_pred.contiguous().view(-1)
+        y_true_flat = y_true.contiguous().view(-1)
+        entropy_map_flat = entropy_map.contiguous().view(-1)
+        
+        # Apply entropy weighting primarily to false negatives (missed vessels)
+        # This helps focus on discontinuities in vessel segmentation
+        
+        # Compute true positives, false positives and false negatives
+        TP = (y_true_flat * y_pred_flat).sum()
+        FP = ((1 - y_true_flat) * y_pred_flat).sum()
+        
+        # Weight false negatives with entropy map
+        # Areas of high entropy (uncertainty) get higher weight
+        weighted_fn = (y_true_flat * (1 - y_pred_flat) * (1 + self.entropy_weight * entropy_map_flat)).sum()
+        
+        # Compute the weighted Tversky index
+        tversky = (TP + self.smooth) / (TP + self.alpha * FP + self.beta * weighted_fn + self.smooth)
+        
+        # Compute the Focal Tversky loss with entropy weighting
+        focal_tversky_loss = (1 - tversky) ** self.gamma
+        
+        return focal_tversky_loss
