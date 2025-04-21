@@ -51,7 +51,7 @@ module load cesga/2020
 module load python/3.9.9
 
 cd /mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fork-roi/fivesegmentor
-source venv/bin/activate
+source ../vroi/bin/activate
 
 python3 code/training/run_benchmark.py \
   -model "${MODEL}" \
