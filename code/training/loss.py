@@ -3,6 +3,18 @@ import torch
 import torch.nn.functional as F
 from .soft_skeleton import SoftSkeletonize
 
+"""
+try:
+    import kornia as K
+except ImportError:
+    K = None
+
+
+
+"""
+K = None
+
+
 
 
 class CompositeLoss(nn.Module):
@@ -296,3 +308,227 @@ class SoftCLDiceLossStrict(nn.Module):
         cl_dice = 1. - harmonic.pow(self.penalty_power)
 
         return cl_dice
+
+
+
+
+
+
+###############################################################
+# 1. DistanceWeighted BinaryCrossEntropy (DWBCE)
+###############################################################
+class DistanceWeightedBCELoss(nn.Module):
+    """
+    Binary CrossEntropy ponderada por la distancia euclídea al píxel de vaso
+    más cercano (target == 1).
+
+    Para cada píxel se calcula:
+        w = exp( -d / sigma )
+
+    de modo que los píxeles sobre el vaso reciben el máximo peso y la
+    importancia decae exponencialmente con la distancia.
+
+    Parámetros
+    ----------
+    sigma : float, opcional
+        Controla la rapidez de la caída (en píxeles). 5.0 por defecto.
+    eps : float, opcional
+        Pequeña constante para evitar divisiones por cero. 1e7 por defecto.
+    """
+
+    def __init__(self, sigma: float = 5.0, eps: float = 1e-7):
+        super().__init__()
+        self.sigma = float(sigma)
+        self.eps = float(eps)
+
+    # --------------------------------------------------------------------- #
+    # Distancia euclídea                                                        #
+    # --------------------------------------------------------------------- #
+    def _edt(self, mask: torch.Tensor) -> torch.Tensor:
+        """
+        Calcula la Euclidean Distance Transform sobre un tensor binario.
+
+        mask : (B, 1, H, W) bool/float
+            1 en los píxeles de vaso.
+
+        Devuelve
+        --------
+        dist : (B, 1, H, W) float
+            Distancia (en píxeles) al píxel de vaso más cercano.
+        """
+        if K is not None and mask.is_cuda:
+            # Kornia espera tensor float en [0,1] en GPU
+            return K.morphology.distance_transform(mask)
+        else:
+            # Fallback CPU using SciPy
+            import numpy as np
+            from scipy.ndimage import distance_transform_edt
+
+            mask_np = mask.detach().cpu().numpy()          # (B, 1, H, W)
+            dist_np = np.stack(
+                [distance_transform_edt(1.0 - m[0]) for m in mask_np]
+            )
+            dist = torch.from_numpy(dist_np).to(mask.device).unsqueeze(1)
+            return dist.float()
+
+    # --------------------------------------------------------------------- #
+    # Forward                                                                 #
+    # --------------------------------------------------------------------- #
+    def forward(self, logits: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+        """
+        logits  : (B, 1, H, W) Logits sin sigmoide.
+        targets : (B, 1, H, W) Máscara GT (0/1 o 0/255). Se castea a float.
+        """
+        # Asegurar forma BCHW
+        if targets.ndim == 3:
+            targets = targets.unsqueeze(1)
+        if logits.ndim == 3:
+            logits = logits.unsqueeze(1)
+
+        # Mismo dtype/dispositivo que los logits  (evita RuntimeError)
+        targets = targets.to(dtype=logits.dtype, device=logits.device)
+        # Binarizar en caso de llegar como probabilidad o 0255
+        targets = (targets > 0.5).float()
+
+        # ---- mapa de pesos dependiente de la distancia -------------------
+        with torch.no_grad():
+            dist = self._edt(targets)                              # (B,1,H,W)
+            weights = torch.exp(-dist / (self.sigma + self.eps))
+            weights = weights / (weights.mean() + self.eps)        # normaliza
+
+        # ---- BCE ponderada ----------------------------------------------
+        bce = F.binary_cross_entropy_with_logits(logits,
+                                                 targets,
+                                                 reduction="none")
+        loss = (bce * weights).mean()
+        return loss
+
+
+
+# ===============================================================
+# 2. VesselHalo Loss  (BCE + énfasis en el borde)
+# ===============================================================
+class VesselHaloLoss(nn.Module):
+    """
+    Combina BCE estándar con un término adicional que penaliza un *halo*
+    (una banda estrecha alrededor de los bordes del vaso) para conseguir
+    contornos más nítidos.
+
+    Parámetros
+    ----------
+    band_width : int
+        Radio (en px) del halo. 35 px funciona bien en imágenes 2 k×2 k.
+    alpha : float
+        Peso extra que reciben los píxeles del halo (halo_weight = 1+alpha).
+    """
+
+    def __init__(self, band_width: int = 5, alpha: float = 1.0):
+        super().__init__()
+        self.band_width = int(band_width)
+        self.alpha = float(alpha)
+        # Dilatación rápida con maxpool
+        self.pool = nn.MaxPool2d(2 * band_width + 1,
+                                 stride=1,
+                                 padding=band_width)
+
+    # ----------------------------------------------------------- #
+    def forward(self, logits: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+        # --- asegurar BCHW y tipos adecuados --------------------
+        if targets.ndim == 3:
+            targets = targets.unsqueeze(1)
+        if logits.ndim == 3:
+            logits = logits.unsqueeze(1)
+
+        targets = targets.to(dtype=logits.dtype, device=logits.device)
+        targets = (targets > 0.5).float()         # binarizar
+
+        # --- BCE base ------------------------------------------
+        base_bce = F.binary_cross_entropy_with_logits(logits,
+                                                      targets,
+                                                      reduction="none")
+
+        # --- halo: dilatación menos máscara original -----------
+        with torch.no_grad():
+            dilated = (self.pool(targets) > 0.5).float()
+            halo = (dilated - targets).clamp_(min=0.0)
+            halo_weight = 1.0 + self.alpha * halo  # 1 fuera, 1+± en halo
+
+        loss = (base_bce * halo_weight).mean()
+        return loss
+
+
+# ===============================================================
+# 3. HaloCLDice Loss (estructura + contorno)
+# ===============================================================
+class HaloCLDiceLoss(nn.Module):
+    """
+    Combina *VesselHaloLoss* con un término SoftCLDice que alinea los
+    esqueletos (centrelines) para promover conectividad y grosor correcto.
+
+    Parámetros
+    ----------
+    band_width : int
+        Radio para el halo (se pasa a `VesselHaloLoss`).
+    alpha : float
+        Peso dentro del halo en el término halo.
+    beta  : float
+        Peso relativo del término CLDice frente al halo.
+    """
+
+    def __init__(self,
+                 band_width: int = 5,
+                 alpha: float = 0.5,
+                 beta: float = 0.5,
+                 iter: int = 30):
+        super().__init__()
+        self.halo_loss = VesselHaloLoss(band_width=band_width, alpha=alpha)
+        self.beta = float(beta)
+        self.iter = iter
+
+    # ----------------- soft skeleton helpers ------------------ #
+    @staticmethod
+    def _soft_erode(img: torch.Tensor) -> torch.Tensor:
+        p1 = -F.max_pool2d(-img, (3, 1), stride=1, padding=(1, 0))
+        p2 = -F.max_pool2d(-img, (1, 3), stride=1, padding=(0, 1))
+        return torch.minimum(p1, p2)
+
+    def _skeletonize_soft(self, x: torch.Tensor, iters: int = 30) -> torch.Tensor:
+        skel = x.clone()
+        for _ in range(iters):
+            skel_new = self._soft_erode(skel)
+            contour = F.relu(skel - skel_new)
+            if contour.sum() == 0:
+                break
+            skel = skel_new
+        return skel
+
+    def _cl_dice(self,
+                 preds: torch.Tensor,
+                 targets: torch.Tensor,
+                 eps: float = 1e-7) -> torch.Tensor:
+        """
+        Soft CLDice de Shit et al. (2021). 0 = perfecto, 1 = fallo total.
+        """
+        P_soft = torch.sigmoid(preds)
+        P_skel = self._skeletonize_soft(P_soft, iters = self.iter)
+        T_skel = self._skeletonize_soft(targets, iters = self.iter)
+
+        tprec = (P_skel * targets).sum(dim=[2, 3]) / (P_skel.sum(dim=[2, 3]) + eps)
+        tsens = (T_skel * P_soft).sum(dim=[2, 3]) / (T_skel.sum(dim=[2, 3]) + eps)
+        cl_dice = 1.0 - 2.0 * tprec * tsens / (tprec + tsens + eps)
+        return cl_dice.mean()
+
+    # ----------------------------- forward --------------------- #
+    def forward(self, logits: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+        if targets.ndim == 3:
+            targets = targets.unsqueeze(1)
+        if logits.ndim == 3:
+            logits = logits.unsqueeze(1)
+
+        targets = targets.to(dtype=logits.dtype, device=logits.device)
+        targets = (targets > 0.5).float()
+
+        loss_halo = self.halo_loss(logits, targets)           # BCE + halo
+        loss_cl   = self._cl_dice(logits, targets)            # CLDice
+
+        return loss_halo + self.beta * loss_cl

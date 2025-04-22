@@ -3,7 +3,7 @@
 # BLOQUE DE CONFIGURACIÓN CENTRAL
 # ====================================================
 # Parámetros generales
-OUTPUT_PREFIX="composite_loss_script_strict100_long"
+OUTPUT_PREFIX="composite_loss_VesselHaloLoss70_Dice30_long"
 MODEL="SantosNet_GCh"
 DATASET="FIVES"
 CONFIG="code/config/config.json"
@@ -36,8 +36,10 @@ RESTORMER="False"
 #   Conex: sin parámetros, peso 0.2
 # Puedes agregar o quitar líneas según la cantidad de funciones que quieras usar.
 #     "Dice|0.8|"
+
 COMPOSITE_LOSS_COMPONENTS=(
-    "SoftCLDiceLossStrict|1.0|penalty_power=5.0,smooth=1e-6"
+    "Dice|0.3|"
+    "VesselHaloLoss|0.70|band_width=5,alpha=1.5"
 )
 
 # ====================================================

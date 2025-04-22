@@ -3,7 +3,7 @@
 # BLOQUE DE CONFIGURACIÓN CENTRAL
 # ====================================================
 # Parámetros generales
-OUTPUT_PREFIX="TestFULLFIVES_SantosNet_GCh_lite_dice15_strict85"
+OUTPUT_PREFIX="testLosses_HaloClDiceLoss_100"
 MODEL="SantosNet_GCh_lite"
 DATASET="FIVES"
 CONFIG="code/config/config.json"
@@ -37,12 +37,16 @@ RESTORMER="False"
 # Puedes agregar o quitar líneas según la cantidad de funciones que quieras usar.
 
 
-#    "FocalTversky|0.0|alpha=0.2,beta=0.8,gamma=0.5"
-#     "SoftCLDiceLossStrict|0.5|penalty_power=5.0,smooth=1e-6"
+#       "FocalTversky|0.0|alpha=0.2,beta=0.8,gamma=0.5"
+#       "SoftCLDiceLossStrict|0.5|penalty_power=5.0,smooth=1e-6"
+#       "Dice|0.15|"
+#       "DistanceWeightedBCE|0.20|sigma=4.0"
+#       "VesselHaloLoss|0.50|band_width=5,alpha=1.5"
+#       "HaloCLDiceLoss|0.30|band_width=5,alpha=0.7,beta=0.3,iter=5"
+
 
 COMPOSITE_LOSS_COMPONENTS=(
-    "Dice|0.15|"
-    "SoftCLDiceLossStrict|0.85|penalty_power=5.0,smooth=1e-6"
+    "HaloCLDiceLoss|0.30|band_width=5,alpha=0.7,beta=0.3,iter=25"
 )
 
 # ====================================================

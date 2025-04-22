@@ -70,27 +70,50 @@ def build_composite_loss(loss_string):
         # Instanciar la función de pérdida según loss_name
         if loss_name == "Dice":
             loss_fn = DiceLoss()
+
         elif loss_name == "SoftCLDiceLoss":
             iter_ = int(params.get("iter", 20))
             smooth = float(params.get("smooth", 1e-12))
             exclude_background = params.get("exclude_background", "False") == "True"
             loss_fn = SoftCLDiceLoss(iter_=iter_, smooth=smooth, exclude_background=exclude_background)
+
         elif loss_name == "soft_dice_cldice":
             iter_ = int(params.get("iter", 3))
             alpha = float(params.get("alpha", 0.5))
             smooth = float(params.get("smooth", 1.0))
             exclude_background = params.get("exclude_background", "False") == "True"
             loss_fn = SoftDiceCLDiceLoss(iter_=iter_, alpha=alpha, smooth=smooth, exclude_background=exclude_background)
+
         elif loss_name == "FocalTversky":
             alpha = float(params.get("alpha", 0.2))
             beta = float(params.get("beta", 0.8))
             gamma = float(params.get("gamma", 0.5))
             smooth = float(params.get("smooth", 1e-6))
             loss_fn = FocalTverskyLoss(alpha=alpha, beta=beta, gamma=gamma, smooth=smooth)
+
         elif loss_name == "SoftCLDiceLossStrict":
             penalty_power = float(params.get("penalty_power", 5.))
             smooth = float(params.get("smooth", 1e-6))
             SoftCLDiceLossStrict(iter_=25, smooth=1e-6, penalty_power=penalty_power, exclude_background=False)
+            
+        elif loss_name in ("DistanceWeightedBCE", "dw_bce"):
+            loss_fn = DistanceWeightedBCELoss(
+                sigma=float(params.get("sigma", 5.0))
+            )
+
+        elif loss_name in ("VesselHaloLoss", "halo"):
+            loss_fn = VesselHaloLoss(
+                band_width=int(params.get("band_width", 5)),
+                alpha=float(params.get("alpha", 1.0))
+            )
+
+        elif loss_name in ("HaloCLDiceLoss", "halo_cldice"):
+            loss_fn = HaloCLDiceLoss(
+                band_width=int(params.get("band_width", 5)),
+                alpha=float(params.get("alpha", 0.5)),
+                beta=float(params.get("beta", 0.5)),
+                iter=int(params.get("iter", 3))
+            )
         else:
             raise ValueError(f"Función de pérdida '{loss_name}' no reconocida en composite loss.")
         
