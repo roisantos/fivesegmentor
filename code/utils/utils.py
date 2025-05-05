@@ -103,87 +103,195 @@ def log_hook_data(epoch, activations, gradients, writer, lr, log_section):
 
 
 
-# Dataset traversal function for training and evaluation
+# Function for traversing dataset during training and evaluation
 def traverseDataset(model: nn.Module, loader: DataLoader, epoch: int,
-                    description, device, funcLoss, 
-                    log_writer: SummaryWriter, log_section, optimizer=None, scheduler=None,
-                    show_result=False, thresh_value=None):
-    is_training = (optimizer is not None)
-    model.train(is_training)
-    total_loss = 0
-    ls_eval_result = []
-    start_time = time.time()
-    #print("DataLoader: ",loader)
-    
-    print_gpu_memory_info("Inicio de época")
+                   thresh_value: float,
+                   log_section: str = None, log_writer: SummaryWriter = None,
+                   description: str = None, device=None,
+                   funcLoss=None, optimizer=None,
+                   tb_logger=None, global_step=0):  # Add new parameters for our logger
+    """
+    Traverse a dataset for training or evaluation.
 
+    Args:
+        model: The model to use
+        loader: DataLoader for the dataset
+        epoch: Current epoch number
+        thresh_value: Threshold value for metrics
+        log_section: Section name for logs
+        log_writer: SummaryWriter for TensorBoard (legacy)
+        description: Description for progress bar
+        device: Device to use (CPU/GPU)
+        funcLoss: Loss function to use
+        optimizer: Optimizer for training (None for evaluation)
+        tb_logger: Comprehensive TensorBoard logger (new)
+        global_step: Current global step for step-level logging (new)
+    """
     
-    with tqdm(loader, unit="batch", mininterval=1.0) as tepoch:
-        #print("Batch data format:", next(iter(tepoch)))
-        #print("tepoch: ", tepoch)
-        for i, (name, data, label) in enumerate(tepoch):
-            #print("Input shape:", data.shape)
-            tepoch.set_description(description)
-            data, label = data.to(device), label.to(device)
-            
-            """
-            print(f"\nBatch {i} cargado en GPU")
+    # Set model to appropriate mode
+    is_training = optimizer is not None
+    if is_training:
+        model.train()
+    else:
+        model.eval()
+
+    # Check if we're using our comprehensive logger
+    using_comprehensive_logger = tb_logger is not None
+
+    # Initialize variables to track metrics
+    sum_loss = 0
+    sum_dice = 0
+    sum_sens = 0
+    sum_spec = 0
+    sum_samples = 0
+
+    # Create a progress bar
+    tepoch = tqdm(loader, desc=description) if description else loader
+
+    # Traverse the dataset batch by batch
+    for i, (name, data, label) in enumerate(tepoch):
+        # Skip empty batches (could happen with custom collate)
+        if data is None or label is None:
+            continue
+
+        # Start step timer for performance logging
+        if using_comprehensive_logger and is_training:
+            tb_logger.start_step_timer()
+        
+        # Move data to device
+        data, label = data.to(device), label.to(device)
+
+        # Debugging: Print memory info for large batches
+        if data.shape[0] > 16:
             print(f"- Tamaño del lote: {data.size()} elementos")
             print(f"- Memoria ocupada por `data`: {data.element_size() * data.nelement() / (1024 ** 2):.2f} MB")
-            print(f"- Memoria ocupada por `label`: {label.element_size() * label.nelement() / (1024 ** 2):.2f} MB")
-            print_gpu_memory_info("Después de cargar lote")
-            """
-            
+            print_gpu_memory_info(f"{description} - Después de cargar datos del lote {i} en GPU")
 
-            if is_training:
-                optimizer.zero_grad()
-                #print("Batch size received by the model:", data.shape)
+        # Forward pass
+        if is_training:
+            # Training mode
+            optimizer.zero_grad()
+            out = model(data)
+            loss = funcLoss(out, label)
+            loss.backward()
+            optimizer.step()
+            
+            # Log step metrics with our comprehensive logger
+            if using_comprehensive_logger:
+                current_step = global_step + i
+                tb_logger.log_step(optimizer, loss.item(), current_step)
+        else:
+            # Evaluation mode
+            with torch.no_grad():
                 out = model(data)
-                loss = sum(funcLoss(x, label) for x in (out if isinstance(out, list) else [out]))
-                loss.backward()
-                optimizer.step()
-                if scheduler: scheduler.step()
-            else:
-                with torch.no_grad():
-                    #print("Batch size received by the model:", data.shape)
-                    out = model(data)
-                    loss = funcLoss(out, label)
-                    for index in range(loader.batch_size):
-                        pred, gt = out[index][0].cpu().numpy(), label[index][0].cpu().numpy()
-                        eval_result = calc_result(pred, gt, thresh_value)
-                        ls_eval_result.append(eval_result)
+                loss = funcLoss(out, label)
 
-            avg_loss = (total_loss + loss.item()) / (i + 1)
-            total_loss += loss.item()
+        # Calculate metrics
+        out_binary = (out > 0.5).float()
+        dice_score = calculate_dice(out_binary, label)
+        sensitivity = calculate_sensitivity(out_binary, label)
+        specificity = calculate_specificity(out_binary, label)
+
+        # Accumulate metrics
+        batch_size = data.size(0)
+        sum_loss += loss.item() * batch_size
+        sum_dice += dice_score * batch_size
+        sum_sens += sensitivity * batch_size
+        sum_spec += specificity * batch_size
+        sum_samples += batch_size
+
+        # Update progress bar
+        if tepoch is not loader:
+            gpu_usage_str = ""
+            if torch.cuda.is_available():
+                gpu_usage_str = f"{torch.cuda.memory_allocated() / (1024 ** 3):.1f}/{torch.cuda.max_memory_allocated() / (1024 ** 3):.1f} GB"
             
-             # Collect GPU memory usage per device
-            gpu_usage = {f"GPU {i}": torch.cuda.memory_allocated(i) / (1024 ** 2) for i in range(torch.cuda.device_count())}
-            gpu_usage_str = " | ".join([f"{k}: {v:.1f}MB" for k, v in gpu_usage.items()])
-
+            avg_loss = sum_loss / sum_samples if sum_samples > 0 else 0
             tepoch.set_postfix(avg_loss=f'{avg_loss:.3f}', curr_loss=f'{loss.item():.3f}', gpu_usage=gpu_usage_str)
-    
-    avg_ms = (time.time() - start_time) * 1000 / len(loader) / loader.batch_size
-    result = avg_result(ls_eval_result)
-    result.update({
-        'avg_ms': avg_ms,
-        'num_params': sum(p.numel() for p in model.parameters())
-    })
-    
-    # Log hook data if training and hooks are registered
 
-    if log_writer and (activations or gradients) and (optimizer is not None):  # Only logs if log_writer is enabled
-        lr = scheduler.get_last_lr()[0] if scheduler else optimizer.param_groups[0]['lr']
-        log_hook_data(epoch, activations, gradients, log_writer, lr, "Train")
-        activations.clear()
-        gradients.clear()
-    """
-     if is_training and (activations or gradients):
-        lr = scheduler.get_last_lr()[0] if scheduler else optimizer.param_groups[0]['lr']
-        log_hook_data(epoch, activations, gradients, log_writer, lr, "Train")
-        activations.clear()
-        gradients.clear()
-    
-    """
-   
+    # Calculate final metrics
+    metrics = {}
+    if sum_samples > 0:
+        metrics = {
+            "loss": sum_loss / sum_samples,
+            "dice": sum_dice / sum_samples,
+            "sensitivity": sum_sens / sum_samples,
+            "specificity": sum_spec / sum_samples
+        }
 
-    return result
+    return metrics
+
+def calculate_dice(pred, target, smooth=1e-6):
+    """
+    Calculate Dice coefficient between prediction and target.
+    
+    Args:
+        pred: Prediction tensor (binary)
+        target: Target tensor (binary)
+        smooth: Smoothing constant to avoid division by zero
+        
+    Returns:
+        Dice coefficient value
+    """
+    # Flatten prediction and target
+    pred_flat = pred.view(-1)
+    target_flat = target.view(-1)
+    
+    # Calculate intersection and union
+    intersection = (pred_flat * target_flat).sum()
+    union = pred_flat.sum() + target_flat.sum()
+    
+    # Calculate Dice coefficient
+    dice = (2. * intersection + smooth) / (union + smooth)
+    
+    return dice.item()
+
+def calculate_sensitivity(pred, target, smooth=1e-6):
+    """
+    Calculate sensitivity (recall) between prediction and target.
+    
+    Args:
+        pred: Prediction tensor (binary)
+        target: Target tensor (binary)
+        smooth: Smoothing constant to avoid division by zero
+        
+    Returns:
+        Sensitivity value
+    """
+    # Flatten prediction and target
+    pred_flat = pred.view(-1)
+    target_flat = target.view(-1)
+    
+    # True Positives (TP) and False Negatives (FN)
+    tp = (pred_flat * target_flat).sum()
+    fn = ((1 - pred_flat) * target_flat).sum()
+    
+    # Calculate sensitivity
+    sensitivity = (tp + smooth) / (tp + fn + smooth)
+    
+    return sensitivity.item()
+
+def calculate_specificity(pred, target, smooth=1e-6):
+    """
+    Calculate specificity between prediction and target.
+    
+    Args:
+        pred: Prediction tensor (binary)
+        target: Target tensor (binary)
+        smooth: Smoothing constant to avoid division by zero
+        
+    Returns:
+        Specificity value
+    """
+    # Flatten prediction and target
+    pred_flat = pred.view(-1)
+    target_flat = target.view(-1)
+    
+    # True Negatives (TN) and False Positives (FP)
+    tn = ((1 - pred_flat) * (1 - target_flat)).sum()
+    fp = (pred_flat * (1 - target_flat)).sum()
+    
+    # Calculate specificity
+    specificity = (tn + smooth) / (tn + fp + smooth)
+    
+    return specificity.item()

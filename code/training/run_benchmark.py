@@ -26,6 +26,8 @@ from models.frnet import *
 from models.roinet import *
 from models.extraModels import * 
 from models.SantosNet import *
+from utils.epoch_stats import EpochActivationStats  # ⬅️ NEW
+from utils.tb_logging import TensorboardLogger  # ⬅️ NEW
 
 # Initialize SummaryWriter for TensorBoard
 #writer = SummaryWriter()
@@ -310,6 +312,44 @@ def train_and_evaluate(model_name, dataset, logging_enabled=False):
     print(f"- Memoria ocupada por modelo en GPU: {sum(p.element_size() * p.nelement() for p in model.parameters()) / (1024 ** 2):.2f} MB")
     print_gpu_memory_info("Después de cargar el modelo en GPU")
 
+    # Set up TensorBoard logging with different frequencies based on dataset size
+    log_frequencies = {
+        "step": max(1, len(dataset['train']) // 20),  # Log ~20 times per epoch
+        "epoch": 1,                                   # Log every epoch
+        "heavy": 5                                    # Log heavy data every 5 epochs
+    }
+    
+    # Initialize our comprehensive logger if logging is enabled
+    tb_logger = TensorboardLogger(writer, model, log_freq=log_frequencies) if logging_enabled else None
+
+    # Remove old activation trackers since we now use the comprehensive logger
+    # ------------------------------------------------------------------
+    # (A) Create the epoch‑level stat tracker **once**
+    # ------------------------------------------------------------------
+    # act_tracker = EpochActivationStats(
+    #     writer,
+    #     tag=f"{model_log_name}/activations/conv0_forward"
+    # )
+    #
+    # # Find the appropriate layer - adapt this to your model structure
+    # if hasattr(model, 'module'):  # For DataParallel models
+    #     if hasattr(model.module, 'dict_module') and 'conv0' in model.module.dict_module:
+    #         target_layer = model.module.dict_module['conv0']
+    #     else:
+    #         # Fallback for other model structures
+    #         print("Warning: Using fallback layer for activation tracking")
+    #         target_layer = list(model.module.children())[0]
+    # else:  # For non-DataParallel models
+    #     if hasattr(model, 'dict_module') and 'conv0' in model.dict_module:
+    #         target_layer = model.dict_module['conv0']
+    #     else:
+    #         # Fallback for other model structures
+    #         print("Warning: Using fallback layer for activation tracking")
+    #         target_layer = list(model.children())[0]
+    #         
+    # handle = target_layer.register_forward_hook(act_tracker.hook)
+    # ------------------------------------------------------------------
+
     if torch.cuda.device_count() > 1:
         print(f"Using {torch.cuda.device_count()} GPUs")
         model = DataParallel(model)
@@ -402,27 +442,35 @@ def train_and_evaluate(model_name, dataset, logging_enabled=False):
 
     bestResult = {"epoch": -1, "dice": -1}
     ls_best_result = []
+    
+    # Track total training steps
+    global_step = 0
 
     for epoch in range(epochs):
         torch.cuda.empty_cache()
 
         # Training
+        # Start timing if logging is enabled
+        if logging_enabled:
+            tb_logger.start_step_timer()
+            
         result_train = traverseDataset(
             model=model,
             loader=trainLoader,
             epoch=epoch,
             thresh_value=thresh_value,
             log_section=f"{model_log_name}_{epoch}_train",
-            log_writer=writer if (epoch % 1 == 0 and logging_enabled) else None,
+            log_writer=None,  # We'll handle logging in our custom logger
             description=f"Train Epoch {epoch}",
             device=device,
             funcLoss=funcLoss,
-            optimizer=optimizer
+            optimizer=optimizer,
+            tb_logger=tb_logger if logging_enabled else None,
+            global_step=global_step
         )
-
-        # Log training metrics
-        for key, value in result_train.items():
-            writer.add_scalar(f"{model_log_name}/{key}_train", value, epoch)
+        
+        # Update global step counter
+        global_step += len(trainLoader)
 
         # Validation
         result_val = traverseDataset(
@@ -431,15 +479,34 @@ def train_and_evaluate(model_name, dataset, logging_enabled=False):
             epoch=epoch,
             thresh_value=thresh_value,
             log_section=f"{model_log_name}_{epoch}_val",
-            log_writer=writer if (epoch % 1 == 0 and logging_enabled) else None,
+            log_writer=None,  # We'll handle logging in our custom logger
             description=f"Val Epoch {epoch}",
             device=device,
             funcLoss=funcLoss
         )
 
-        # Log validation metrics
-        for key, value in result_val.items():
-            writer.add_scalar(f"{model_log_name}/{key}_val", value, epoch)
+        # Use our comprehensive logger for epoch-level metrics
+        if logging_enabled:
+            # Get sample data for visualization (use first batch from validation set)
+            sample_data = next(iter(valLoader)) if len(valLoader) > 0 else None
+            sample_inputs = sample_data[1].to(device) if sample_data is not None else None
+            sample_targets = sample_data[2].to(device) if sample_data is not None else None
+            
+            # Get model predictions
+            sample_outputs = None
+            if sample_inputs is not None:
+                with torch.no_grad():
+                    sample_outputs = model(sample_inputs)
+            
+            # Log all epoch-level metrics
+            tb_logger.log_epoch(
+                epoch=epoch,
+                train_metrics=result_train,
+                val_metrics=result_val,
+                sample_inputs=sample_inputs,
+                sample_targets=sample_targets,
+                sample_outputs=sample_outputs
+            )
 
         # Evaluate dice score and update if it's the best model so far
         dice = result_val['dice']
@@ -469,6 +536,15 @@ def train_and_evaluate(model_name, dataset, logging_enabled=False):
         if epoch - bestResult['epoch'] >= thresh_value:
             print(f"Stopping training: no improvement in last {thresh_value} epochs.")
             break
+
+    # Clean up our logger if used
+    if logging_enabled and tb_logger is not None:
+        tb_logger.close()
+
+    # Remove the old hook (comment out as we're no longer using it)
+    # handle.remove()
+    
+    # ... rest of the function ...
 
 
 # ---------------------------------------

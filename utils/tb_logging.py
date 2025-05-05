@@ -1,0 +1,243 @@
+# utils/tb_logging.py
+import torch
+import torchvision
+import time
+import numpy as np
+from torch.utils.tensorboard import SummaryWriter
+from utils.epoch_stats import EpochActivationStats
+
+class TensorboardLogger:
+    """
+    Comprehensive TensorBoard logging utility that handles:
+    - Core metrics (loss, dice, etc.)
+    - Optimizer stats (LR, etc.)
+    - Activation health (mean, std, zero rates)
+    - Gradients (norms, update ratios)
+    - Weights (norms, histograms)
+    - Sample visualizations
+    - System performance
+    """
+    def __init__(self, writer, model, log_freq={"step": 10, "epoch": 1, "heavy": 5}):
+        """
+        Initialize the logger.
+        
+        Args:
+            writer: SummaryWriter instance
+            model: The model to track
+            log_freq: Dictionary with logging frequencies:
+                - "step": How often to log per-step metrics
+                - "epoch": How often to log per-epoch metrics
+                - "heavy": How often to log heavy metrics (histograms, images)
+        """
+        self.writer = writer
+        self.model = model
+        self.log_freq = log_freq
+        self.step_time_start = None
+        self.tracked_layers = {}
+        self.activation_trackers = {}
+        self.zero_rate_trackers = {}
+        
+        # Register activation trackers for key layers
+        self._register_activation_trackers()
+        
+    def _register_activation_trackers(self):
+        """Register hooks on key layers to track activations"""
+        # Find key layers to track (first, middle, last)
+        if hasattr(self.model, 'dict_module'):
+            modules = self.model.dict_module
+            # Track first conv, bottleneck, and final layers
+            key_layers = ['conv0', 'bottle1', 'conv5'] if all(k in modules for k in ['conv0', 'bottle1', 'conv5']) else []
+            
+            for layer_name in key_layers:
+                # Activation stats tracker (mean, std)
+                tracker = EpochActivationStats(
+                    self.writer,
+                    tag=f"Activations/{layer_name}"
+                )
+                self.activation_trackers[layer_name] = tracker
+                modules[layer_name].register_forward_hook(tracker.hook)
+                
+                # Zero rate tracker (for ReLU layers)
+                if 'conv' in layer_name:  # Convolution layers typically have ReLUs
+                    zero_tracker = ZeroRateTracker(
+                        self.writer,
+                        tag=f"Activations/{layer_name}_zero_rate"
+                    )
+                    self.zero_rate_trackers[layer_name] = zero_tracker
+                    modules[layer_name].register_forward_hook(zero_tracker.hook)
+                
+                # Store reference to tracked layers
+                self.tracked_layers[layer_name] = modules[layer_name]
+    
+    def start_step_timer(self):
+        """Start timing a training step"""
+        self.step_time_start = time.time()
+    
+    def log_step(self, optimizer, loss, global_step):
+        """Log per-step metrics"""
+        if global_step % self.log_freq["step"] != 0:
+            return
+            
+        # 1. Step execution time
+        if self.step_time_start is not None:
+            step_time = (time.time() - self.step_time_start) * 1000  # in ms
+            self.writer.add_scalar("System/step_time_ms", step_time, global_step)
+            self.step_time_start = None  # Reset timer
+        
+        # 2. Learning rate
+        for i, param_group in enumerate(optimizer.param_groups):
+            self.writer.add_scalar(f"LR/group_{i}", param_group['lr'], global_step)
+        
+        # 3. Current loss
+        self.writer.add_scalar("Train/step_loss", loss, global_step)
+        
+        # 4. Global gradient norm (if we have gradients)
+        params = [p for p in self.model.parameters() if p.requires_grad and p.grad is not None]
+        if params:
+            # Compute without clipping, just for logging
+            total_norm = torch.norm(torch.stack([torch.norm(p.grad.detach(), 2) for p in params]), 2)
+            self.writer.add_scalar("Grad/global_norm", total_norm.item(), global_step)
+        
+        # 5. Log gradient stats for selected layers (every 10 steps)
+        if global_step % (self.log_freq["step"] * 10) == 0:
+            self._log_gradient_stats(global_step)
+    
+    def _log_gradient_stats(self, global_step):
+        """Log detailed gradient statistics for selected layers"""
+        for name, layer in self.tracked_layers.items():
+            # Only log if the layer has parameters with gradients
+            for param_name, param in layer.named_parameters():
+                if param.requires_grad and param.grad is not None:
+                    # Gradient norm for this parameter
+                    grad_norm = param.grad.norm().item()
+                    self.writer.add_scalar(f"Grad/{name}/{param_name}_norm", grad_norm, global_step)
+                    
+                    # Update-to-weight ratio
+                    weight_norm = param.data.norm().item()
+                    update_ratio = grad_norm / (weight_norm + 1e-12)
+                    self.writer.add_scalar(f"Grad/{name}/{param_name}_update_ratio", update_ratio, global_step)
+    
+    def log_epoch(self, epoch, train_metrics, val_metrics, sample_inputs=None, sample_targets=None, sample_outputs=None):
+        """
+        Log epoch-level metrics.
+        
+        Args:
+            epoch: The current epoch
+            train_metrics: Dictionary of training metrics
+            val_metrics: Dictionary of validation metrics
+            sample_inputs: Optional batch of input images for visualization
+            sample_targets: Optional batch of target masks for visualization
+            sample_outputs: Optional batch of model predictions for visualization
+        """
+        # Skip logging based on epoch frequency
+        if epoch % self.log_freq["epoch"] != 0:
+            return
+            
+        # 1. Training metrics
+        for name, value in train_metrics.items():
+            self.writer.add_scalar(f"Train/{name}", value, epoch)
+            
+        # 2. Validation metrics
+        for name, value in val_metrics.items():
+            self.writer.add_scalar(f"Val/{name}", value, epoch)
+        
+        # Log activation stats through our trackers
+        for tracker in self.activation_trackers.values():
+            tracker.log_epoch(epoch)
+            
+        # Log zero rate stats through our trackers
+        for tracker in self.zero_rate_trackers.values():
+            tracker.log_epoch(epoch)
+        
+        # Heavy logging (less frequent)
+        if epoch % self.log_freq["heavy"] == 0:
+            # 3. Weight histograms and norms
+            self._log_weight_stats(epoch)
+            
+            # 4. Sample visualizations
+            if all(x is not None for x in [sample_inputs, sample_targets, sample_outputs]):
+                self._log_sample_visualizations(epoch, sample_inputs, sample_targets, sample_outputs)
+    
+    def _log_weight_stats(self, epoch):
+        """Log weight statistics and histograms"""
+        for name, layer in self.tracked_layers.items():
+            for param_name, param in layer.named_parameters():
+                if param.requires_grad:
+                    # Weight norm
+                    weight_norm = param.data.norm().item()
+                    self.writer.add_scalar(f"Weights/{name}/{param_name}_norm", weight_norm, epoch)
+                    
+                    # Weight histogram
+                    self.writer.add_histogram(f"Weights/{name}/{param_name}_hist", param.data, epoch)
+    
+    def _log_sample_visualizations(self, epoch, inputs, targets, outputs):
+        """Log sample visualizations"""
+        # Take up to 4 samples from the batch
+        n_samples = min(4, inputs.shape[0])
+        
+        # Process each sample
+        for i in range(n_samples):
+            # Get sample data
+            input_img = inputs[i].detach().cpu()
+            target_mask = targets[i].detach().cpu()
+            output_mask = outputs[i].detach().cpu()
+            
+            # Normalize to [0,1] for visualization
+            if input_img.shape[0] == 3:  # RGB image
+                input_img = (input_img - input_img.min()) / (input_img.max() - input_img.min() + 1e-8)
+            elif input_img.shape[0] == 1:  # Grayscale image
+                input_img = input_img.repeat(3, 1, 1)  # Convert to RGB
+                input_img = (input_img - input_img.min()) / (input_img.max() - input_img.min() + 1e-8)
+            
+            # Create a 3-channel visualization for the target and output masks
+            target_vis = torch.zeros((3, target_mask.shape[1], target_mask.shape[2]))
+            target_vis[0] = target_mask[0]  # Put in red channel
+            
+            output_vis = torch.zeros((3, output_mask.shape[1], output_mask.shape[2]))
+            output_vis[1] = output_mask[0]  # Put in green channel
+            
+            # Create composite visualization (input with masks overlaid)
+            alpha = 0.6
+            composite = input_img.clone()
+            mask = (target_mask[0] > 0.5) | (output_mask[0] > 0.5)
+            composite[:, mask] = alpha * composite[:, mask] + (1-alpha) * torch.stack([
+                target_mask[0, mask],  # Red: target
+                output_mask[0, mask],  # Green: prediction
+                torch.zeros_like(target_mask[0, mask])  # Blue: unused
+            ])
+            
+            # Log individual images
+            self.writer.add_image(f"Images/sample_{i}/input", input_img, epoch)
+            self.writer.add_image(f"Images/sample_{i}/target", target_vis, epoch)
+            self.writer.add_image(f"Images/sample_{i}/output", output_vis, epoch)
+            self.writer.add_image(f"Images/sample_{i}/composite", composite, epoch)
+            
+    def close(self):
+        """Clean up resources"""
+        # Clean up hooks here if needed
+        pass
+
+
+class ZeroRateTracker:
+    """Tracks the fraction of zeros in activations (ReLU dead neurons)"""
+    def __init__(self, writer, tag):
+        self.writer = writer
+        self.tag = tag
+        self.reset()
+        
+    def reset(self):
+        self.total_zeros = 0
+        self.total_elements = 0
+        
+    @torch.no_grad()
+    def hook(self, _module, _inp, out):
+        zeros = (out == 0).float().sum().item()
+        elements = out.numel()
+        self.total_zeros += zeros
+        self.total_elements += elements
+        
+    def log_epoch(self, epoch):
+        if self.total_elements > 0:
+            zero_rate = self.total_zeros / self.total_elements
+            self.writer.add_scalar(f"{self.tag}", zero_rate, epoch)
+        self.reset() 
