@@ -13,8 +13,8 @@ import datetime as dt
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))
 sys.path.insert(0, ROOT_DIR)
 
-from code.training.run_benchmark import train_and_evaluate, load_models_from_json
-from code.ds.dataset import prepare_datasets_from_json
+from run_benchmark import train_and_evaluate, load_models_from_json
+from ds.dataset import prepare_datasets_from_json
 
 def main():
     print("Setting up test TensorBoard logging run...")
