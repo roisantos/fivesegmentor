@@ -16,6 +16,8 @@ sys.path.insert(0, ROOT_DIR)
 from run_benchmark import train_and_evaluate, load_models_from_json
 from ds.dataset import prepare_datasets_from_json
 
+
+
 def main():
     print("Setting up test TensorBoard logging run...")
     
@@ -30,6 +32,9 @@ def main():
     # Load a model and dataset
     config_path = os.path.join(ROOT_DIR, "code/config/config.json")
     models = load_models_from_json(config_path)
+    
+    import run_benchmark
+    run_benchmark.models = models      
     
     # Set up a simple augmentation config
     augmentation_config = {
