@@ -113,54 +113,53 @@ def traverseDataset(model: nn.Module, loader: DataLoader, epoch: int,
     total_loss = 0
     ls_eval_result = []
     start_time = time.time()
-    #print("DataLoader: ",loader)
     
     print_gpu_memory_info("Inicio de época")
-
     
     with tqdm(loader, unit="batch", mininterval=1.0) as tepoch:
-        #print("Batch data format:", next(iter(tepoch)))
-        #print("tepoch: ", tepoch)
         for i, (name, data, label) in enumerate(tepoch):
-            #print("Input shape:", data.shape)
             tepoch.set_description(description)
             data, label = data.to(device), label.to(device)
-            
-            """
-            print(f"\nBatch {i} cargado en GPU")
-            print(f"- Tamaño del lote: {data.size()} elementos")
-            print(f"- Memoria ocupada por `data`: {data.element_size() * data.nelement() / (1024 ** 2):.2f} MB")
-            print(f"- Memoria ocupada por `label`: {label.element_size() * label.nelement() / (1024 ** 2):.2f} MB")
-            print_gpu_memory_info("Después de cargar lote")
-            """
-            
 
             if is_training:
                 optimizer.zero_grad()
-                #print("Batch size received by the model:", data.shape)
                 out = model(data)
                 loss = sum(funcLoss(x, label) for x in (out if isinstance(out, list) else [out]))
                 loss.backward()
+                
+                # Add gradient clipping
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                
                 optimizer.step()
                 if scheduler: scheduler.step()
+                
+                # Clear some memory
+                del out
+                torch.cuda.empty_cache()
             else:
                 with torch.no_grad():
-                    #print("Batch size received by the model:", data.shape)
                     out = model(data)
                     loss = funcLoss(out, label)
                     for index in range(loader.batch_size):
                         pred, gt = out[index][0].cpu().numpy(), label[index][0].cpu().numpy()
                         eval_result = calc_result(pred, gt, thresh_value)
                         ls_eval_result.append(eval_result)
+                    # Clear some memory
+                    del out
+                    torch.cuda.empty_cache()
 
             avg_loss = (total_loss + loss.item()) / (i + 1)
             total_loss += loss.item()
             
-             # Collect GPU memory usage per device
+            # Collect GPU memory usage per device
             gpu_usage = {f"GPU {i}": torch.cuda.memory_allocated(i) / (1024 ** 2) for i in range(torch.cuda.device_count())}
             gpu_usage_str = " | ".join([f"{k}: {v:.1f}MB" for k, v in gpu_usage.items()])
 
             tepoch.set_postfix(avg_loss=f'{avg_loss:.3f}', curr_loss=f'{loss.item():.3f}', gpu_usage=gpu_usage_str)
+            
+            # Clear some memory
+            del data, label, loss
+            torch.cuda.empty_cache()
     
     avg_ms = (time.time() - start_time) * 1000 / len(loader) / loader.batch_size
     result = avg_result(ls_eval_result)
@@ -170,20 +169,10 @@ def traverseDataset(model: nn.Module, loader: DataLoader, epoch: int,
     })
     
     # Log hook data if training and hooks are registered
-
-    if log_writer and (activations or gradients) and (optimizer is not None):  # Only logs if log_writer is enabled
+    if log_writer and (activations or gradients) and (optimizer is not None):
         lr = scheduler.get_last_lr()[0] if scheduler else optimizer.param_groups[0]['lr']
-        log_hook_data(epoch, activations, gradients, log_writer, lr, "Train")
+        log_hook_data(epoch, activations, gradients, log_writer, lr, log_section)
         activations.clear()
         gradients.clear()
-    """
-     if is_training and (activations or gradients):
-        lr = scheduler.get_last_lr()[0] if scheduler else optimizer.param_groups[0]['lr']
-        log_hook_data(epoch, activations, gradients, log_writer, lr, "Train")
-        activations.clear()
-        gradients.clear()
-    
-    """
-   
 
     return result

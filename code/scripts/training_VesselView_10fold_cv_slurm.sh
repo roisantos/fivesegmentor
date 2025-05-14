@@ -1,18 +1,19 @@
 #!/bin/bash
 MODEL="RoiNet2bottleneck"
-DATASET="FIVES_joined_ordered"
+DATASET="/mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fork-roi/fivesegmentor/dataset/FIVES_joined_ordered"
 CONFIG="code/config/config.json"
-EPOCHS=2
+EPOCHS=25
 BATCH_SIZE=1
-NUM_WORKERS=8
+NUM_WORKERS=4
 LR=1e-4
 WEIGHT_DECAY=0.001
-FOLDS=2
+FOLDS=5
 
 
 
 
-OUTPUT_PREFIX="VesselView_2fold_2epochs"
+
+OUTPUT_PREFIX="VesselView_3fold_25epochs"
 
 # ==== Prep output dir + SBATCH file path ====
 mkdir -p runs/${OUTPUT_PREFIX}
@@ -28,7 +29,7 @@ cat <<EOF > "${SBATCH_FILE}"
 #SBATCH -c 32
 #SBATCH --mem=32G
 #SBATCH -p short
-#SBATCH -t 2:00:00
+#SBATCH -t 35:00:00
 
 module load cesga/2020
 module load python/3.9.9
@@ -37,13 +38,12 @@ cd /mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fork-roi/fivesegmentor
 source venv/bin/activate
 
 python3 code/training/VesselView_10fold_cv.py \
-  -dataset "$DATASET" \
-  --epochs "$EPOCHS" \
-  --batch_size "$BATCH_SIZE" \
-  --num_workers "$NUM_WORKERS" \
-  --lr "$LR" \
-  --weight_decay "$WEIGHT_DECAY" \
-  --folds "$FOLDS"
+  --dataset "${DATASET}" \
+  --epochs "${EPOCHS}" \
+  --bs "${BATCH_SIZE}" \
+  --num_workers "${NUM_WORKERS}" \
+  --lr "${LR}" \
+  --folds "${FOLDS}"
 
 EOF
 
