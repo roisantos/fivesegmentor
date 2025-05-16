@@ -1,0 +1,476 @@
+VesselView: A CNN for Segmentation of Vessels
+in High-Resolution Retinal Fundus Images
+Roi Santos-Mateos1[000000031640933X]
+, Alexander
+Velev-Santos1[0009000106556160], and Xosé M. Pardo2[0000000239975150]
+1 Escola Técnica Superior de Enxeñaría (ETSE)
+roi.santos@usc.es, alexander.velev@rai.usc.es
+2 Centro Singular de Investigación en Tecnoloxías Intelixentes (CiTIUS)
+xose.pardo@usc.gal
+Universidade de Santiago de Compostela, Spain
+Abstract. Retinal fundus imaging offers a noninvasive window into the
+eyes microvasculature, critical for early detection of both ocular and systemic diseases. In this work, we introduce VesselView, a U-Netinspired
+convolutional neural network designed for precise segmentation of retinal vessels in high-resolution fundus images. VesselView features doubleconvolution residual blocks with large kernels, a deepened bottleneck
+and skip connections. We conduct a fair comparative evaluation on the
+FIVES dataset at its full resolution (2048×2048), benchmarking VesselView against state-of-the-art models. The quantitative results demonstrate that VesselView achieves superior overall performanceas measured by the area under the ROC curvewith particularly strong results
+in glaucomatous and normal images. The qualitative comparative provides complementary evidence to the quantitative findings by showing
+that VesselView balances fewer missed vessels with more false positives
+than competing models, and validates the critical role of the chosen skip
+connections through an ablation study. These findings underscore the
+potential of specialized deep learning architectures for high-resolution
+retinal vessel segmentation.
+Keywords: Retinal Fundus Images · Medical Imaging · Convolutional
+Neural Networks · Image Segmentation · Deep Learning
+1 Introduction
+Retinal fundus images provide a noninvasive window into the internal structures of the eye, which is critical for the diagnosis of prevalent diseases such
+as diabetic retinopathy (DR), glaucoma, and age-related macular degeneration
+(AMD) [21, 22, 1, 16]. Furthermore, retinal vascular network often reflects early
+signs of both ocular and systemic pathologies [24, 8, 9, 18]. The identification of
+the corresponding morphological biomarkers (as thickness, curvature, density,
+or branching patterns) is based on the segmentation of the vascular structure.
+Current automatic segmentation techniques leverage the capabilities of machine
+learning approaches to provide tools that improve the performance of manual
+2 Roi Santos-Mateos et al.
+segmentation in terms of time, objectivity and accuracy [3, 25]. The majority of
+these approaches are based on the UNet model [20, 5]. Despite advances in model
+architectures for segmentation, current research is predominantly fueled by standardized datasets such as DRIVE [21] (768×584 pixels, 40 images), STARE [12]
+(700×605 pixels, 20 images) and CHASEDB1 [7] (990×960 pixels, 28 images)
+that are small in size, lack diversity and have low resolution, which limits generalization in learning.
+The new FIVES dataset [15] improves upon previous datasets by providing
+images that covering a broader range of clinical conditions (DR, AMD, glaucoma, and healthy eyes), higher resolution (2048×2048), and a larger number
+of annotated samples (800 distributed in 600 for training and 200 for testing).
+While many recent studies have used downscaled versions of FIVES for computational efficiency [14, 6], we retain the original high resolution to preserve fine
+vascular details critical for accurate segmentation.
+Main contributions. We present VesselView, a U-Netinspired CNN that (i)
+uses 9×9 residual blocks, a deeper bottleneck, and selective 1×1-refined skip
+connections to capture fine vessels and suppress noise; (ii) is trained on FIVES
+without down-sampling; and (iii) surpasses four strong baselines in AUC across
+DR, AMD, glaucoma and healthy eyes, with an ablation confirming the value of
+its skip strategy.
+The remainder of this paper is structured as follows: Section 2 introduces
+the related work, Section 3 describes our proposal, Section 4 details the dataset,
+experimental methodology, and presents our results and analysis, and Section 4.4
+discusses the implications of our findings for clinical practice and future research.
+2 Related Work
+The application of deep learning to retinal image analysis has evolved rapidly,
+with CNNs proving particularly effective for vessel segmentation and disease
+classification [19, 13, 25]. The U-Net architecture [20] remains foundational for
+medical image segmentation due to its encoder-decoder structure with skip connections that preserve spatial details. Retinal fundus images are typically large
+and high-resolution, as the vascular structure of interest presents very fine details
+and low-contrast areas against cluttered backgrounds.
+Hence, they are very challenging for raters and consequently, annotations
+for vascular structures are sparser than for other organs and structures in the
+biomedical domain [2, 4]. To address such issues, the WNet [10] was proposed.
+It is a dual-path fully convolutional network, similar to a double U-Net, with
+a postprocessing step that combines conditional random field smoothing and
+hierarchical merging, yielding competitive segmentation results. The intuition
+behind the two stacked U-Nets is that the first U-Net produces an initial segmentation approximation, which is then used as an attention-like map to refine
+the segmentation in the second U-Net.
+SA-UNet [11] is a spatial attention U-Net proposed to circumvent the requirement of massive training datasets. Using a spatial attention module and
+3. PROPOSED SEGMENTATION NETWORK 3
+structured dropout convolutional blocks, instead of the original U-Net convolutional blocks, it focuses on the most informative pixels to retain the relevant fine
+details in the vasculature while avoiding overfitting.
+Other architectures like FR-UNet [17] tackles the flaws in detecting fine vessels by enhancing U-Net-based architectures with a multi-resolution interactive
+mechanism. While U-Net increases receptive field by downsampling, FR-UNet
+maintains full resolution through the entire process for precise segmentation,
+while a feature aggregation module fuses features from different scales to conjugate small-capillary sensitivity with contextual awareness. Additionally, a dualthreshold iterative algorithm leverages pixel neighborhood relationships to refine
+vessel detection and connectivity in the final binary segmentation map.
+A common limitation in the learning process of previous methods is that
+they have been trained predominantly on small datasets, such as DRIVE [21],
+STARE [12], and CHASEDB1 [7], which lack the variability found in clinical
+practice. Previous work with multi-disease datasets has highlighted domain shift
+challenges, with models often showing performance degradation when applied to
+images outside their training distribution [10, 23, 15].
+Unlike WNets two-stage refinement, SA-UNets attention focus, or FR-UNets
+full-resolution streams, VesselView fuses large-kernel residual blocks, a deep bottleneck, and 1×1-refined skip linksan as-yet untried mix that drives its edge
+on FIVES.
+3 Proposed Segmentation Network
+In this paper we introduce VesselView, a U-Net-like deep convolutional neural
+network specifically engineered for the precise semantic segmentation of color
+retinal fundus images, with a primary focus on delineating intricate blood vessel
+structures. The architecture, as showed in Figure 1, is built on an encoderdecoder framework enriched with strategic skip connections and a deepened
+bottleneck, utilizing advanced residual building blocks to robustly extract and
+integrate local and global features, which is critical for capturing complex vascular patterns in high-resolution retinal imagery. This design addresses the unique
+challenges of retinal fundus imaging, such as noise, fine vessel delineation, and
+subtle pathological features, positioning VesselView as an optimized tool for
+automated vessel segmentation in clinical ophthalmology.
+3.1 Residual Block
+The Residual Blocks are colored light orange in the diagram in Figure 1, and
+their layer sequence is depicted in a dashed square box on the bottom right. It
+comprises two consecutive 9×9 convolutional layers, each one followed by batch
+normalization (BN) and, in the first instance, ReLU activation. A critical feature
+of the Residual Block is its shortcut connection, a pathway that directly adds
+the input of the residual block to the output of the second batch normalization.
+This residual pathway, ended by a ReLU activation, facilitates better gradient
+4 Roi Santos-Mateos et al.
+Input
+RGB Image, 3ch,
+MPSO-CLAHE
+Residual Block
+(32 ch, H)
+Skip0
+(32 ch)
+Residual Block
+(64 ch, H)
+MaxPool 2x2
++ Conv 1x1,
+(128 ch, H/2)
+Skip1
+(128 ch)
+Residual Block
+(128 ch, H/2)
+MaxPool 2x2
++ Conv 1x1,
+(256 ch, H/4)
+Skip2
+(256 ch)
+Residual Block
+(256 ch, H/4)
+Residual Block
+(256 ch, H/4)
+Merge
+Concaten. Skip2,
+Conv+BN+ReLU,
+512ch to 128ch,
+H/4
+Residual Block
+(128 ch, H/4)
+Up
+Transposed Conv,
+(64 ch, H/2)
+Merge
+Concatenation
+with Skip1,
+192ch to 64ch, H/2
+Residual Block
+(64 ch, H/2)
+Up
+Transposed
+Conv, (32 ch, H)
+Merge
+Concatenation
+with Skip0,
+64ch to 32ch, H
+Residual Block
+(32 ch, H)
+Output
+(1×1 conv +
+Sigmoid, 1ch)
+Double Convolution Residual Block
+Input Conv. 9x9
+BN
+ReLU
+Conv. 9x9
+BN Add
+ReLU
+Output
+Fig. 1. The architecture of VesselView. The diagram in the dashed rectangle depicts its
+Double Convolution Residual Block, colored in light orange in the VesselView diagram.
+flow during backpropagation, mitigating the vanishing-gradient problem and facilitating the training of deeper layers. Compared to the convolutional blocks in
+a standard U-Net, VesselViews larger kernels increase the receptive field, while
+the residual connection ensures that the network preserves fine vessel details that
+might otherwise be lost in deeper layers.
+3.2 VesselView Architecture
+VesselView is built upon a U-Net-like encoder-decoder framework but introduces
+several modifications tailored for segmenting retinal vessels in high-resolution
+fundus images. These enhancements address challenges such as noise, fine vessel
+delineation, and computational efficiency, making VesselView distinct from the
+standard U-Net.
+Encoder Pathway The encoder extracts hierarchical features from RGB retinal fundus images with an input resolution of H × W. Unlike U-Nets standard
+3 × 3 convolutions, VesselView uses residual block-like convolutions with 9 × 9
+kernels to capture broader spatial contexts critical for vascular networks. The
+process starts with an initial residual block that produces a feature map with
+3. PROPOSED SEGMENTATION NETWORK 5
+32 filters at full resolution (H, W). A second residual block increases this to
+64 filters, still at H, W. Downsampling occurs in two stages: first, max-pooling
+is followed by an explicit 1 × 1 convolutiona feature not found in U-Net
+reducing the resolution to H/2, W/2 and increasing the channels to 128 filters.
+This output is saved as a skip connection. The second stage further reduces the
+resolution to H/4, W/4 with 256 filters, also saved as a skip connection.
+Bottleneck The bottleneck in VesselView is deepened compared to U-Nets
+single convolutional layer, featuring two residual blocks with 256 channels at
+H/4, W/4. This design strengthens the extraction of high-level semantic features
+vital for segmenting thin vessels. The output of the second residual block is
+concatenated with the 256-channel skip connection from the encoder, creating a
+512-channel feature map. A 3 × 3 convolution, batch normalization, and ReLU
+activation then refine this to 256 channels, maintaining the H/4, W/4 resolution.
+Decoder Pathway The decoder reconstructs the spatial resolution and refines
+segmentation predictions. Starting from the bottlenecks 256-channel output at
+H/4, W/4, a residual block reduces this to 128 channels. A transposed 2 × 2
+convolution upsamples the feature map to H/2, W/2 with 64 channels, which
+is then concatenated with the 128-channel skip connection from the encoder,
+forming a 192-channel feature map. This is refined to 64 channels via a 3 × 3
+convolution, batch normalization, and ReLU activation. A second residual block
+processes this at H/2, W/2, followed by another transposed 2×2 convolution that
+upsamples to full resolution (H, W) with 32 channels. This is concatenated with
+the 32-channel skip connection from the encoders initial block, yielding a 64-
+channel feature map, refined to 32 channels. A final residual block processes this,
+and a 1×1 convolution with sigmoid activation generates the segmentation mask.
+VesselViews skip connection strategy differs from U-Nets direct concatenation
+by selectively using skip connections (e.g., post-1 × 1 convolution outputs) and
+refining them with convolutions after merging with upsampled features.
+Dataset Preparation Three channels were used as input for the retinal fundus images and one channel for the ground truth segmentation masks. During
+training, data augmentation strategies (random rotations, flips) were applied to
+increase the diversity of training samples and mitigate overfitting.
+Data augmentation: Training images were augmented using geometric transformations with a 50% probability: Rotations were applied with fixed angles of
+-180°, -90°, 0°, or 90°. Independently, horizontal and vertical flips were applied.
+These augmentations were implemented with linear interpolation for the image
+and nearest-neighbor interpolation for the label. On-the-fly sampling means the
+disk dataset stays at 600 images (H 150 per class), but with the 12.5% chance
+of no transform any given pass, each epoch introduces H 525 novel variants,
+totalling H 105 k augmented samples over 200 epochs.
+6 Roi Santos-Mateos et al.
+The implementation of our model, including training and evaluation scripts,
+is available on GitHub at https://github.com/roisantos/vesselview.
+4 Experiments and Results
+All experiments were conducted on FIVES dataset [15]. The original image size
+of 2048×2048 pixels and test partition were preserved. All models were trained
+using Dice loss function, Adam optimizer with an initial learning rate of 1×104
+,
+weight decay of 1 × 103
+, a batch size of 1, and a total of 200 epochs (tuned
+based on validation performance). In particular, for the baseline U-Net [20] its
+ResNet34 encoder was pretrained on the ImageNet dataset. Data augmentation
+(random rotations, flips, and brightness adjustments) was applied to improve
+model generalization. All models were trained on 80% of the "train" partition
+of the FIVES dataset, with the remaining 20% used for validation.
+To comprehensively evaluate our approach, we compare VesselView against
+several established state-of-the-art networks, namely U-Net using an ResNet34
+encoder pre-trained in ImageNet [20], WNet [10], SA-UNet [11], and FR-UNet [17].
+Models were trained using Adam.
+Evaluation Metrics We evaluated segmentation performance using standard
+metrics: Accuracy (proportion of correctly segmented pixels), Sensitivity or Recall (fraction of vessel pixels correctly identified), Specificity (fraction of background pixels correctly identified), Precision (fraction of predicted vessel pixels
+that are correct), F1 (Dice) Score (harmonic mean of Precision and Sensitivity),
+Intersection over Union (IoU) (overlap between prediction and ground truth),
+Matthews Correlation Coefficient (MCC) (correlation between predicted and
+actual binary classifications), and Area Under the ROC Curve (AUC) (models
+discriminative ability across thresholds). In the FIVES dataset, some thin vessels are missing from the Ground Truth, causing sensitivity and Dice metrics
+to penalize models for detecting these unlabeled vessels, thus underestimating
+true segmentation performance. AUC, however, evaluates the trade-off between
+sensitivity and false positive rate across all thresholds, focusing on the models
+discriminative ability rather than exact alignment with the ground truth. This
+threshold-independency property makes AUC more resilient when the ground
+truth is incomplete, as it doesnt punish the model as harshly as Dice for detecting real but unlabeled features. Given the clinical need to detect fine vessels
+for early disease diagnosis, we argue that AUC is a more suitable metric for
+assessing vessel segmentation in this context.
+4.1 Quantitative Results
+The goal of this comparison is to obtain a broad perspective on the ability of
+each model to segment retinal vessels in both healthy and diseased retinas.
+4. EXPERIMENTS AND RESULTS 7
+Table 1. Overall Performance Comparison results against the 200 FIVES test images.
+Model AUC Dice Acc Sen Spe Pre IoU MCC
+FR-UNet 0.8883 0.7939 0.9799 0.7364 0.9946 0.9234 0.6895 0.8001
+SA-UNet 0.7229 0.6613 0.9689 0.5314 0.9986 0.9669 0.5215 0.6824
+WNet 0.8252 0.6882 0.9571 0.7008 0.9727 0.7757 0.5611 0.6919
+UNet 0.8901 0.8659 0.9870 0.8299 0.9962 0.9447 0.7881 0.8964
+VesselView 0.9097 0.8128 0.9807 0.7771 0.9925 0.9044 0.7125 0.8151
+Overall Performance Comparison: The average results against all the 200
+images in the FIVES´s "test" partition are shown in Table 1. VesselView achieved
+the highest AUC (0.9097) across all tested models, demonstrating superior overall vessel detection capabilities, which is crucial for screening applications. However, U-Net with ResNet34 encoder outperformed VesselView in sensitivity (0.8299
+vs. 0.7771) and boundary delineation metrics, including Dice (0.8659 vs. 0.8128),
+accuracy (0.9870 vs. 0.9807), specificity (0.9962 vs. 0.9925), precision (0.9447 vs.
+0.9044), IoU (0.7881 vs. 0.7125), and MCC (0.8964 vs. 0.8151). This indicates
+that while VesselView excels in overall detection as measured by AUC, U-Net
+with ResNet34 is more effective at precisely outlining vessel boundaries, making it better suited for tasks requiring detailed vascular mapping. Among the
+other models, FR-UNet delivers a balanced performance but does not lead in
+any specific area, while SA-UNet and WNet show weaker results, likely due to
+architectural limitations for this dataset.
+Disease-Specific Experimental Results To evaluate the robustness of the
+five models across diverse retinal conditions, we conducted a quantitative analysis by testing each model separately on the four disease groups within the "test"
+partition of the FIVES dataset (50 images per group). By isolating the performance on each disease group, we aimed to assess how well each model adapts to
+the distinct vascular characteristics of healthy and diseased retinas. The results
+are presented in Table 2.
+VesselView consistently demonstrates strong performance in overall vessel
+detection across all disease groups, particularly excelling in AUC. For Normal, DR, and Glaucoma groups, VesselView achieves the highest AUC (0.9476,
+0.8887, and 0.8743, respectively), highlighting its robustness in distinguishing
+vessel from non-vessel pixels across varying conditions. In DR, for instance, VesselView leads in AUC (0.8887), though U-Net with ResNet34 outperforms it in
+sensitivity (0.8370 vs. 0.7545) and boundary delineation metrics such as Dice
+(0.8785 vs. 0.8193) and IoU (0.8016 vs. 0.7162). This suggests that while VesselView is highly effective at overall vessel detection, it may occasionally miss
+subtle disease-specific features like microaneurysms compared to U-Net with
+ResNet34. In Glaucoma, VesselViews AUC (0.8743) remains the highest, but
+U-Net with ResNet34 surpasses it in sensitivity (0.7197 vs. 0.6692), Dice (0.7778
+vs. 0.7230), and IoU (0.6916 vs. 0.6255), indicating a trade-off between overall
+detection and precise segmentation. For AMD, U-Net with ResNet34 takes the
+lead across most metrics, including AUC (0.9344 vs. 0.9281), Dice (0.9193 vs.
+8 Roi Santos-Mateos et al.
+Table 2. Disease-Specific Experimental Results, against the 50 images per group in
+the FIVES test images.
+Disease Model AUC Dice Acc Sen Spe Pre IoU MCC
+Normal
+FR-UNet 0.9393 0.8757 0.9799 0.8711 0.9893 0.8864 0.7826 0.8665
+SA-UNet 0.8522 0.7771 0.9703 0.6653 0.9974 0.9613 0.6472 0.7812
+WNet 0.9162 0.7115 0.9323 0.9023 0.9342 0.6076 0.5646 0.7025
+UNet 0.9124 0.8879 0.9827 0.8617 0.9932 0.9241 0.8030 0.8814
+VesselView 0.9476 0.8331 0.9727 0.8401 0.9842 0.8388 0.7191 0.8219
+DR
+FR-UNet 0.8319 0.7916 0.9808 0.7101 0.9975 0.9600 0.6846 0.8025
+SA-UNet 0.7482 0.6226 0.9668 0.4808 0.9993 0.9816 0.4760 0.6573
+WNet 0.7825 0.6908 0.9718 0.6033 0.9955 0.9238 0.5645 0.7106
+UNet 0.8914 0.8785 0.9879 0.8370 0.9968 0.9510 0.8016 0.8797
+VesselView 0.8887 0.8193 0.9823 0.7545 0.9963 0.9390 0.7162 0.8240
+Glaucoma
+FR-UNet 0.8386 0.7525 0.9853 0.6813 0.9973 0.9328 0.6527 0.7690
+SA-UNet 0.7498 0.5790 0.9744 0.4629 0.9994 0.9606 0.4581 0.6185
+WNet 0.7919 0.6568 0.9675 0.6617 0.9797 0.7372 0.5467 0.6616
+UNet 0.8376 0.7778 0.9877 0.7197 0.9974 0.9565 0.6916 0.7905
+VesselView 0.8743 0.7230 0.9838 0.6692 0.9955 0.9094 0.6255 0.7410
+AMD
+FR-UNet 0.8721 0.8471 0.9823 0.7911 0.9961 0.9535 0.7557 0.8510
+SA-UNet 0.8284 0.7500 0.9728 0.6308 0.9988 0.9822 0.6225 0.7641
+WNet 0.8493 0.7665 0.9738 0.7098 0.9931 0.9222 0.6520 0.7774
+UNet 0.9344 0.9193 0.9892 0.9013 0.9953 0.9452 0.8565 0.9156
+VesselView 0.9281 0.8756 0.9840 0.8447 0.9938 0.9306 0.7893 0.8735
+0.8756), and sensitivity (0.9013 vs. 0.8447), while VesselView remains competitive in AUC but lags in boundary delineation.
+U-Net with ResNet34 excels in precise vessel mapping, achieving the highest
+Dice, accuracy, precision, and IoU scores in Normal, DR, and AMD images. For
+instance, in AMD, it records a Dice score of 0.9193 and IoU of 0.8565, making
+it the top performer for tasks requiring detailed vessel outlines. Among the remaining models, FR-UNet delivers balanced but unremarkable results across all
+groups. SA-UNet exhibits high specificity and precision (e.g., 0.9994 and 0.9606
+in Glaucoma), but its low sensitivity (e.g., 0.4629 in Glaucoma) indicates it
+misses many vessels, rendering it less reliable for disease detection. WNet performs adequately in Normal images but struggles in diseased groups, particularly
+in precision and IoU.
+4.2 Qualitative Results
+Figure 2 compares vessel segmentation outputs for a Glaucoma-affected retinal
+fundus image, chosen due to VesselViews superior AUC performance in this
+category. The first row shows full segmented images, while the second row zooms
+in for detail, showing in red the missed vessels and in yellow the false positives.
+We observe that VesselView and UNet with pretrained ResNet34 outperform
+others in capturing vessel networks, though VesselView balances fewer missed
+vessels with more false positives than UNet. FR-UNet, SA-UNet, and WNet miss
+many thin vessels, aligning with quantitative results highlighting VesselViews
+effectiveness for Glaucoma images despite a precision trade-off.
+4. EXPERIMENTS AND RESULTS 9
+Fig. 2. Qualitative comparative for the inference images obtained with the five trained
+models against the ground truth of the "test" image 105_G, from the group Glaucoma.
+4.3 Ablation Study
+To assess the role of skip connections in preserving fine vascular details, we compared the original VesselView architecture with a variant where skip connections
+are entirely removed (termed NoSkip). In this variant, the encoder and decoder
+operate without lateral feature fusion, meaning that high-resolution information
+from early encoder layers is not reintroduced during upsampling. Consequently,
+the NoSkip variant relies solely on the bottleneck output and the decoders upsampling pathway to reconstruct vessel structures.
+Table 3. Ablation study for the skip connections. Comparative results by disease group
+for 2 models (VesselView, NoSkip).
+Disease Model AUC Dice Acc Sen Spe Pre IoU MCC
+DR VesselView 0.88796 0.82784 0.98243 0.77835 0.99488 0.91900 0.72605 0.82949
+NoSkip 0.83699 0.81156 0.98162 0.73316 0.99714 0.94868 0.70444 0.81704
+Glaucoma VesselView 0.85882 0.75610 0.98404 0.72393 0.99315 0.87937 0.65469 0.76584
+NoSkip 0.80870 0.73321 0.98486 0.66988 0.99693 0.90535 0.63839 0.75050
+AMD VesselView 0.91585 0.86373 0.98226 0.83838 0.99244 0.91897 0.77138 0.86238
+NoSkip 0.90305 0.87296 0.98427 0.83007 0.99532 0.94529 0.78705 0.87251
+Normal VesselView 0.94169 0.80368 0.96348 0.87984 0.97043 0.75403 0.67690 0.79185
+NoSkip 0.91961 0.84051 0.97372 0.84714 0.98465 0.84792 0.73051 0.83030
+Table 3 presents the comparative performance across four disease groups in
+the FIVES dataset. VesselView consistently outperforms NoSkip in AUC and
+Sensitivity across all groups, with notable improvements in DR (AUC: 0.8880
+vs. 0.8370, Sen: 0.7784 vs. 0.7332), Glaucoma (AUC: 0.8588 vs. 0.8087, Sen:
+0.7239 vs. 0.6699), and AMD (AUC: 0.9159 vs. 0.9031, Sen: 0.8384 vs. 0.8301).
+These results indicate that skip connections enhance the models discriminative
+ability and sensitivity to fine vessels. For the Normal subset, NoSkip yields higher
+Dice (0.8405 vs 0.8037) and Precision (0.8479 vs 0.7540), whereas VesselView
+still attains the superior AUC (0.9417 vs 0.9196).
+10 Roi Santos-Mateos et al.
+Fig. 3. Qualitative ablation study comparing VesselView and NoSkip on test image
+105_G from the Glaucoma group.
+Figure 3 illustrates the qualitative impact using a Glaucoma image (test image 105_G), chosen due to VesselViews superior AUC in this category. The first
+row shows the full segmentation outputs, the second row zooms into a specific
+region, and the third row provides difference maps (red: ground truth, white:
+true positives, yellow: false positives). VesselView captures more continuous and
+detailed vessel structures, particularly thin branches, compared to NoSkip, which
+exhibits fragmentation and misses several fine vessels. The difference maps confirm this: VesselView has fewer red areas (missed vessels) but more yellow (false
+positives), while NoSkip shows more red, indicating a higher rate of missed vessels.
+4.4 Discussion
+VesselViews superior AUC make it particularly valuable for screening applications, where detecting all potential vessel abnormalities takes precedence over
+precise boundary delineation. Its varying performance across disease groups suggests targeted improvements could enhance clinical utility, particularly for glaucoma cases.
+The disease-specific findings reveal critical insights for model selection in clinical and research settings. VesselViews robust performance, especially in Glaucoma, positions it as a promising tool for screening applications where detecting
+all vesselsparticularly in subtle disease statesis paramount. Conversely, UNet with pretrained ResNet34 encoder shows strength in boundary delineation,
+which makes it ideal for applications requiring high precision, such as quantitative vessel analysis across multiple conditions. The weaker performance of
+SA-UNet and WNet in sensitivity highlights their limitations for disease-specific
+5. CONCLUSIONS 11
+tasks, while FR-UNets consistency may suit general-purpose use without excelling in any particular area. Ultimately, these results emphasize the importance
+of tailoring model choice to the target disease, as performance varies significantly
+across retinal conditions.
+5 Conclusions
+We present VesselView, a specialized U-Net-like architecture for high-resolution
+retinal vessel segmentation featuring double convolutional residual block operations, a deepened bottleneck, and strategic skip connections. Evaluated on the
+FIVES dataset against established models, VesselView demonstrates superior
+AUC, critical metrics for clinical screening applications. Disease-specific analysis has revealed excellent performance. The qualitative results show more segmented vessels than its closest competitor, but they are penalized by more false
+positives. The ablation study highlights the importance of skip connections in
+the segmentation performance of VesselView. These results highlight the importance of task-specific network design and high-quality, diverse data sets to
+advance retinal vessel segmentation in clinical applications. Future work will
+explore loss functions, attention mechanisms, and architectural refinements to
+address disease-specific challenges.
+6 Acknowledgements
+This work has received financial support from the Spanish government (project
+Ref. PID2023-153341OB-I00), from the Xunta de Galicia, (Ref. ED431G-2023/04
+and Ref. ED431C 2021/48), and from the European Regional Development Fund
+(ERDF/FEDER).
+References
+1. Abdelsalam, M.M.: Effective blood vessels reconstruction methodology for early
+detection and classification of diabetic retinopathy using octa images by artificial
+neural network. Informatics in Medicine Unlocked 20, 100390 (2020)
+2. Abràmoff, M.D., Garvin, M.K., Sonka, M.: Retinal imaging and image analysis.
+IEEE reviews in biomedical engineering 3, 169208 (2010)
+3. Boudegga, H., Elloumi, Y., Akil, M., Bedoui, M.H., Kachouri, R., Abdallah, A.B.:
+Fast and efficient retinal blood vessel segmentation method based on deep learning
+network. Computerized Medical Imaging and Graphics 90, 101902 (2021)
+4. Brown, K., Sewell, J.M., Trempe, C., Peto, T., Travison, T.G.: Comparison of
+image-assisted versus traditional fundus examination. Eye and Brain pp. 18 (2013)
+5. Deshpande, A., Jamilpour, N., Jiang, B., Michel, P., Eskandari, A., Kidwell, C.,
+Wintermark, M., Laksari, K.: Automatic segmentation, feature extraction and
+comparison of healthy and stroke cerebral vasculature. NeuroImage: Clinical 30,
+102573 (2021)
+12 Roi Santos-Mateos et al.
+6. Fadugba, J., Köhler, P., Koch, L., Manescu, P., Berens, P.: Benchmarking retinal
+blood vessel segmentation models for cross-dataset and cross-disease generalization.
+arXiv preprint arXiv:2406.14994 (2024)
+7. Fraz, M.M., Remagnino, P., Hoppe, A., Uyyanonvara, B., Rudnicka, A.R., Owen,
+C.G., Barman, S.A.: An ensemble classification-based approach applied to retinal
+blood vessel segmentation. IEEE Transactions on Biomedical Engineering 59(9),
+25382548 (2012)
+8. Frost, S., Kanagasingam, Y., Sohrabi, H., Vignarajan, J., Bourgeat, P., Salvado, O.,
+Villemagne, V., Rowe, C.C., Lance Macaulay, S., Szoeke, C., et al.: Retinal vascular
+biomarkers for early detection and monitoring of alzheimers disease. Translational
+psychiatry 3(2), e233e233 (2013)
+9. Fu, Y., Yusufu, M., Wang, Y., He, M., Shi, D., Wang, R.: Association of retinal microvascular density and complexity with incident coronary heart disease.
+Atherosclerosis 380, 117196 (2023)
+10. Galdran, A., Anjos, A., Dolz, J., Chakor, H., Lombaert, H., Ayed, I.B.: State-ofthe-art retinal vessel segmentation with minimalistic models. Scientific Reports
+12(1), 6174 (2022)
+11. Guo, C., Szemenyei, M., Yi, Y., Wang, W., Chen, B., Fan, C.: Sa-unet: Spatial attention u-net for retinal vessel segmentation. In: 2020 25th international conference
+on pattern recognition (ICPR). pp. 12361242. IEEE (2021)
+12. Hoover, A., Kouznetsova, V., Goldbaum, M.: Locating blood vessels in retinal
+images by piecewise threshold probing of a matched filter response. IEEE Transactions on Medical imaging 19(3), 203210 (2000)
+13. Ilesanmi, A.E., Ilesanmi, T., Gbotoso, G.A.: A systematic review of retinal fundus image segmentation and classification methods using convolutional neural networks. Healthcare Analytics 4, 100261 (2023)
+14. Islam, M.T., Zaky, H., Alam, T.: Multi-disease retinal vessel segmentation: A deep
+learning approach. In: 2023 6th International Conference on Signal Processing and
+Information Security (ICSPIS). pp. 139144. IEEE (2023)
+15. Jin, K., Huang, X., Zhou, J., Li, Y., Yan, Y., Sun, Y., Zhang, Q., Wang, Y., Ye, J.:
+Fives: A fundus image dataset for artificial intelligence based vessel segmentation.
+Scientific Data 9(1), 475 (2022)
+16. Jonas, J.B., Cheung, C.M.G., Panda-Jonas, S.: Updates on the epidemiology of
+age-related macular degeneration. Asia-Pacific Journal of Ophthalmology 6(6),
+493497 (2017)
+17. Liu, W., Yang, H., Tian, T., Cao, Z., Pan, X., Xu, W., Jin, Y., Gao, F.: Fullresolution network and dual-threshold iteration for retinal vessel and coronary angiograph segmentation. IEEE journal of biomedical and health informatics 26(9),
+46234634 (2022)
+18. Nguyen, C.T., Hui, F., Charng, J., Velaedan, S., van Koeverden, A.K., Lim, J.K.,
+He, Z., Wong, V.H., Vingrys, A.J., Bui, B.V., et al.: Retinal biomarkers provide
+insight into cortical pharmacology and disease. Pharmacology & therapeutics
+175, 151177 (2017)
+19. Qin, Q., Chen, Y.: A review of retinal vessel segmentation for fundus image analysis. Engineering Applications of Artificial Intelligence 128, 107454 (2024)
+20. Ronneberger, O., Fischer, P., Brox, T.: U-net: Convolutional networks for biomedical image segmentation. In: Medical image computing and computer-assisted
+interventionMICCAI 2015: 18th international conference, Munich, Germany, October 5-9, 2015, proceedings, part III 18. pp. 234241. Springer (2015)
+6. ACKNOWLEDGEMENTS 13
+21. Staal, J., Abràmoff, M.D., Niemeijer, M., Viergever, M.A., Van Ginneken, B.:
+Ridge-based vessel segmentation in color images of the retina. IEEE transactions
+on medical imaging 23(4), 501509 (2004)
+22. Taylor, T.R., Menten, M.J., Rueckert, D., Sivaprasad, S., Lotery, A.J.: The role
+of the retinal vasculature in age-related macular degeneration: a spotlight on octa.
+Eye 38(3), 442449 (2024)
+23. Yue, K., Zhan, L., Wang, Z.: Unsupervised domain adaptation teacherstudent
+network for retinal vessel segmentation via full-resolution refined model. Scientific
+Reports 15(1), 2038 (2025)
+24. Yusufu, M., Friedman, D.S., Kang, M., Padhye, A., Shang, X., Zhang, L., Shi, D.,
+He, M.: Retinal vascular fingerprints predict incident stroke: findings from the uk
+biobank cohort study. Heart (2025)
+25. Zang, P., Hormel, T.T., Hwang, T.S., Bailey, S.T., Huang, D., Jia, Y.: Deeplearningaided diagnosis of diabetic retinopathy, age-related macular degeneration,
+and glaucoma based on structural and angiographic oct. Ophthalmology Science
+3(1), 100245 (2023)
