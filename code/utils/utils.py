@@ -143,6 +143,7 @@ def traverseDataset(model: nn.Module, loader: DataLoader, epoch: int,
     sum_dice = 0
     sum_sens = 0
     sum_spec = 0
+    sum_iou = 0
     sum_samples = 0
 
     # Create a progress bar
@@ -191,6 +192,7 @@ def traverseDataset(model: nn.Module, loader: DataLoader, epoch: int,
         dice_score = calculate_dice(out_binary, label)
         sensitivity = calculate_sensitivity(out_binary, label)
         specificity = calculate_specificity(out_binary, label)
+        iou_score = calculate_iou(out_binary, label)
 
         # Accumulate metrics
         batch_size = data.size(0)
@@ -198,6 +200,7 @@ def traverseDataset(model: nn.Module, loader: DataLoader, epoch: int,
         sum_dice += dice_score * batch_size
         sum_sens += sensitivity * batch_size
         sum_spec += specificity * batch_size
+        sum_iou += iou_score * batch_size
         sum_samples += batch_size
 
         # Update progress bar
@@ -216,7 +219,8 @@ def traverseDataset(model: nn.Module, loader: DataLoader, epoch: int,
             "loss": sum_loss / sum_samples,
             "dice": sum_dice / sum_samples,
             "sensitivity": sum_sens / sum_samples,
-            "specificity": sum_spec / sum_samples
+            "specificity": sum_spec / sum_samples,
+            "iou": sum_iou / sum_samples
         }
 
     return metrics
@@ -295,3 +299,20 @@ def calculate_specificity(pred, target, smooth=1e-6):
     specificity = (tn + smooth) / (tn + fp + smooth)
     
     return specificity.item()
+
+def calculate_iou(pred, target, smooth=1e-6):
+    """
+    Calculate Intersection over Union (IoU) between prediction and target.
+    Args:
+        pred: Prediction tensor (binary)
+        target: Target tensor (binary)
+        smooth: Smoothing constant to avoid division by zero
+    Returns:
+        IoU value
+    """
+    pred_flat = pred.view(-1)
+    target_flat = target.view(-1)
+    intersection = (pred_flat * target_flat).sum()
+    union = pred_flat.sum() + target_flat.sum() - intersection
+    iou = (intersection + smooth) / (union + smooth)
+    return iou.item()

@@ -379,6 +379,9 @@ def train_and_evaluate(model_name, dataset, logging_enabled=False):
         lr=learning_rate, weight_decay=weight_decay
     )
 
+    # Add CosineAnnealingLR scheduler
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs, eta_min=1e-6)
+
     # Select the loss function based on config
     loss_function = args.loss
     if loss_function not in model_name:
@@ -485,6 +488,9 @@ def train_and_evaluate(model_name, dataset, logging_enabled=False):
             funcLoss=funcLoss
         )
 
+        # Step the scheduler
+        scheduler.step()
+
         # Use our comprehensive logger for epoch-level metrics
         if logging_enabled:
             # Get sample data for visualization (use first batch from validation set)
@@ -507,6 +513,9 @@ def train_and_evaluate(model_name, dataset, logging_enabled=False):
                 sample_targets=sample_targets,
                 sample_outputs=sample_outputs
             )
+
+        # Print IoU metric
+        print(f"Validation Dice: {result_val['dice']} | IoU: {result_val.get('iou', 'N/A')} for Model: {model_log_name}")
 
         # Evaluate dice score and update if it's the best model so far
         dice = result_val['dice']

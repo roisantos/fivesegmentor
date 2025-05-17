@@ -41,33 +41,42 @@ class TensorboardLogger:
         self._register_activation_trackers()
         
     def _register_activation_trackers(self):
-        """Register hooks on key layers to track activations"""
-        # Find key layers to track (first, middle, last)
+        """Register hooks on all conv+ReLU layers to track activations and zero/dead neuron rates"""
         if hasattr(self.model, 'dict_module'):
             modules = self.model.dict_module
-            # Track first conv, bottleneck, and final layers
-            key_layers = ['conv0', 'bottle1', 'conv5'] if all(k in modules for k in ['conv0', 'bottle1', 'conv5']) else []
-            
-            for layer_name in key_layers:
-                # Activation stats tracker (mean, std)
+            for layer_name, layer in modules.items():
+                # Register for all layers that are nn.Module (conv blocks, nn.Sequential, etc.)
+                # Only register for layers with a forward method
+                if not hasattr(layer, 'forward'):
+                    continue
+                # Register activation stats tracker (mean, std)
                 tracker = EpochActivationStats(
                     self.writer,
                     tag=f"Activations/{layer_name}"
                 )
                 self.activation_trackers[layer_name] = tracker
-                modules[layer_name].register_forward_hook(tracker.hook)
-                
-                # Zero rate tracker (for ReLU layers)
-                if 'conv' in layer_name:  # Convolution layers typically have ReLUs
-                    zero_tracker = ZeroRateTracker(
-                        self.writer,
-                        tag=f"Activations/{layer_name}_zero_rate"
-                    )
-                    self.zero_rate_trackers[layer_name] = zero_tracker
-                    modules[layer_name].register_forward_hook(zero_tracker.hook)
-                
+                layer.register_forward_hook(tracker.hook)
+
+                # Register zero rate tracker (for ReLU layers or conv blocks)
+                zero_tracker = ZeroRateTracker(
+                    self.writer,
+                    tag=f"Activations/{layer_name}_zero_rate"
+                )
+                self.zero_rate_trackers[layer_name] = zero_tracker
+                layer.register_forward_hook(zero_tracker.hook)
+
+                # Register dead neuron rate tracker
+                dead_tracker = DeadNeuronRateTracker(
+                    self.writer,
+                    tag=f"Activations/{layer_name}_dead_neuron_rate"
+                )
+                if not hasattr(self, 'dead_neuron_trackers'):
+                    self.dead_neuron_trackers = {}
+                self.dead_neuron_trackers[layer_name] = dead_tracker
+                layer.register_forward_hook(dead_tracker.hook)
+
                 # Store reference to tracked layers
-                self.tracked_layers[layer_name] = modules[layer_name]
+                self.tracked_layers[layer_name] = layer
     
     def start_step_timer(self):
         """Start timing a training step"""
@@ -149,12 +158,18 @@ class TensorboardLogger:
         for tracker in self.zero_rate_trackers.values():
             tracker.log_epoch(epoch)
         
+        # Log dead neuron rate stats through our trackers
+        if hasattr(self, 'dead_neuron_trackers'):
+            for tracker in self.dead_neuron_trackers.values():
+                tracker.log_epoch(epoch)
+        
         # Heavy logging (less frequent)
         if epoch % self.log_freq["heavy"] == 0:
             # 3. Weight histograms and norms
             self._log_weight_stats(epoch)
-            
-            # 4. Sample visualizations
+            # 4. Activation histograms
+            self._log_activation_histograms(epoch)
+            # 5. Sample visualizations
             if all(x is not None for x in [sample_inputs, sample_targets, sample_outputs]):
                 self._log_sample_visualizations(epoch, sample_inputs, sample_targets, sample_outputs)
     
@@ -169,6 +184,14 @@ class TensorboardLogger:
                     
                     # Weight histogram
                     self.writer.add_histogram(f"Weights/{name}/{param_name}_hist", param.data, epoch)
+    
+    def _log_activation_histograms(self, epoch):
+        """Log activation histograms for all tracked layers"""
+        for name, tracker in self.activation_trackers.items():
+            if hasattr(tracker, 'last_activations') and tracker.last_activations is not None:
+                activations = tracker.last_activations
+                if isinstance(activations, torch.Tensor):
+                    self.writer.add_histogram(f"Activations/{name}_hist", activations, epoch)
     
     def _log_sample_visualizations(self, epoch, inputs, targets, outputs):
         """Log sample visualizations"""
@@ -240,4 +263,33 @@ class ZeroRateTracker:
         if self.total_elements > 0:
             zero_rate = self.total_zeros / self.total_elements
             self.writer.add_scalar(f"{self.tag}", zero_rate, epoch)
+        self.reset()
+
+
+class DeadNeuronRateTracker:
+    """Tracks the fraction of channels that are always zero (dead neurons) in activations"""
+    def __init__(self, writer, tag):
+        self.writer = writer
+        self.tag = tag
+        self.reset()
+    def reset(self):
+        self.channel_zero_counts = None
+        self.total_batches = 0
+    @torch.no_grad()
+    def hook(self, _module, _inp, out):
+        # out: (B, C, H, W)
+        if out.dim() < 2:
+            return
+        zeros_per_channel = (out == 0).float().view(out.size(0), out.size(1), -1).sum(-1)
+        total_per_channel = out[0,0].numel()
+        dead = (zeros_per_channel == total_per_channel).float().sum(-1)  # per batch
+        if self.channel_zero_counts is None:
+            self.channel_zero_counts = dead.clone()
+        else:
+            self.channel_zero_counts += dead
+        self.total_batches += out.size(0)
+    def log_epoch(self, epoch):
+        if self.channel_zero_counts is not None and self.total_batches > 0:
+            dead_rate = self.channel_zero_counts.sum().item() / (self.total_batches * self.channel_zero_counts.numel())
+            self.writer.add_scalar(f"{self.tag}", dead_rate, epoch)
         self.reset() 
