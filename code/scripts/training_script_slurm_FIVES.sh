@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ==== User defined variables ====
-OUTPUT_PREFIX="PChFTg1.5"
+OUTPUT_PREFIX="SNPChFT"
 MODEL="SantosNet_PCh"
 DATASET="FIVES"
 CONFIG="code/config/config.json"

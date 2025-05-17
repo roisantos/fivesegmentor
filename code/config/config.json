@@ -341,7 +341,7 @@
       "ch_in": 3,
       "ch_out": 1,
       "ls_mid_ch": [32, 64, 128, 128, 64, 32],
-      "k_size": 9,
+      "k_size": 5,
       "cls_init_block": "ResidualBlock",
       "cls_conv_block": "ResidualBlock"
     },

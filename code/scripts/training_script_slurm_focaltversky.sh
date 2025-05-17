@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ==== Userdefined variables ====
-OUTPUT_PREFIX="RN5SL"
+OUTPUT_PREFIX="RN5FT"
 MODEL="RoiNet5"  # Using the learnable channel fusion model
 DATASET="FIVES"
 CONFIG="code/config/config.json"
@@ -14,8 +14,7 @@ WEIGHT_DECAY=0.001
 LOGGING="True"
 THRESH_VALUE=100
 
-
-LOSS="SanLoss"
+LOSS="FocalTversky"
 ALPHA=0.2; BETA=0.8; GAMMA=1.5
 
 # ==== solo para SanLoss ====
