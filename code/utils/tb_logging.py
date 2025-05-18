@@ -44,39 +44,34 @@ class TensorboardLogger:
         """Register hooks on all conv+ReLU layers to track activations and zero/dead neuron rates"""
         if hasattr(self.model, 'dict_module'):
             modules = self.model.dict_module
+            # Ensure tracked_layers is initialized
+            if not hasattr(self, 'tracked_layers'):
+                self.tracked_layers = {}
+
             for layer_name, layer in modules.items():
-                # Register for all layers that are nn.Module (conv blocks, nn.Sequential, etc.)
-                # Only register for layers with a forward method
                 if not hasattr(layer, 'forward'):
                     continue
-                # Register activation stats tracker (mean, std)
-                tracker = EpochActivationStats(
-                    self.writer,
-                    tag=f"Activations/{layer_name}"
-                )
-                self.activation_trackers[layer_name] = tracker
-                layer.register_forward_hook(tracker.hook)
 
-                # Register zero rate tracker (for ReLU layers or conv blocks)
-                zero_tracker = ZeroRateTracker(
-                    self.writer,
-                    tag=f"Activations/{layer_name}_zero_rate"
-                )
-                self.zero_rate_trackers[layer_name] = zero_tracker
-                layer.register_forward_hook(zero_tracker.hook)
+                # Register activation stats tracker (histograms)
+                tracker = EpochActivationStats(self.writer, tag=f"Activations/{layer_name}")
+                tracker.register(layer)
+                self.activation_trackers[layer_name] = tracker
+
+                # Register zero rate tracker
+                zero_tracker = ZeroRateTracker(self.writer, tag=f"ZeroRate/{layer_name}")
+                handle_zero = layer.register_forward_hook(zero_tracker.hook)
+                self.zero_rate_trackers[layer_name] = (zero_tracker, handle_zero)
 
                 # Register dead neuron rate tracker
-                dead_tracker = DeadNeuronRateTracker(
-                    self.writer,
-                    tag=f"Activations/{layer_name}_dead_neuron_rate"
-                )
-                if not hasattr(self, 'dead_neuron_trackers'):
-                    self.dead_neuron_trackers = {}
-                self.dead_neuron_trackers[layer_name] = dead_tracker
-                layer.register_forward_hook(dead_tracker.hook)
-
-                # Store reference to tracked layers
+                if DeadNeuronRateTracker is not None: # Ensure class is available
+                    dead_tracker = DeadNeuronRateTracker(self.writer, tag=f"DeadNeurons/{layer_name}")
+                    handle_dead = layer.register_forward_hook(dead_tracker.hook)
+                    self.dead_neuron_trackers[layer_name] = (dead_tracker, handle_dead)
+                
+                # Store reference to tracked layers for _log_weight_stats
                 self.tracked_layers[layer_name] = layer
+        else:
+            print("Model does not have 'dict_module', skipping activation tracker registration.")
     
     def start_step_timer(self):
         """Start timing a training step"""
@@ -138,7 +133,6 @@ class TensorboardLogger:
             sample_targets: Optional batch of target masks for visualization
             sample_outputs: Optional batch of model predictions for visualization
         """
-        # Skip logging based on epoch frequency
         if epoch % self.log_freq["epoch"] != 0:
             return
             
@@ -150,48 +144,56 @@ class TensorboardLogger:
         for name, value in val_metrics.items():
             self.writer.add_scalar(f"Val/{name}", value, epoch)
         
-        # Log activation stats through our trackers
-        for tracker in self.activation_trackers.values():
+        # Log activation stats (histograms) through our trackers
+        for layer_name, tracker in self.activation_trackers.items():
             tracker.log_epoch(epoch)
             
         # Log zero rate stats through our trackers
-        for tracker in self.zero_rate_trackers.values():
+        for layer_name, (tracker, _) in self.zero_rate_trackers.items(): # Unpack tuple
             tracker.log_epoch(epoch)
         
         # Log dead neuron rate stats through our trackers
         if hasattr(self, 'dead_neuron_trackers'):
-            for tracker in self.dead_neuron_trackers.values():
+            for layer_name, (tracker, _) in self.dead_neuron_trackers.items(): # Unpack tuple
                 tracker.log_epoch(epoch)
         
         # Heavy logging (less frequent)
         if epoch % self.log_freq["heavy"] == 0:
             # 3. Weight histograms and norms
             self._log_weight_stats(epoch)
-            # 4. Activation histograms
-            self._log_activation_histograms(epoch)
+            # Activation histograms are now logged above via EpochActivationStats
             # 5. Sample visualizations
             if all(x is not None for x in [sample_inputs, sample_targets, sample_outputs]):
                 self._log_sample_visualizations(epoch, sample_inputs, sample_targets, sample_outputs)
     
     def _log_weight_stats(self, epoch):
         """Log weight statistics and histograms"""
-        for name, layer in self.tracked_layers.items():
-            for param_name, param in layer.named_parameters():
-                if param.requires_grad:
-                    # Weight norm
-                    weight_norm = param.data.norm().item()
-                    self.writer.add_scalar(f"Weights/{name}/{param_name}_norm", weight_norm, epoch)
-                    
-                    # Weight histogram
-                    self.writer.add_histogram(f"Weights/{name}/{param_name}_hist", param.data, epoch)
-    
-    def _log_activation_histograms(self, epoch):
-        """Log activation histograms for all tracked layers"""
-        for name, tracker in self.activation_trackers.items():
-            if hasattr(tracker, 'last_activations') and tracker.last_activations is not None:
-                activations = tracker.last_activations
-                if isinstance(activations, torch.Tensor):
-                    self.writer.add_histogram(f"Activations/{name}_hist", activations, epoch)
+        # Ensure tracked_layers exists and is populated
+        if hasattr(self, 'tracked_layers'):
+            for name, layer in self.tracked_layers.items():
+                for param_name, param in layer.named_parameters():
+                    if param.requires_grad: # Check if param has data and requires_grad
+                        if param.data is not None:
+                             # Weight norm
+                            weight_norm = param.data.norm().item()
+                            self.writer.add_scalar(f"Weights/{name}/{param_name}_norm", weight_norm, epoch)
+                            
+                            # Weight histogram
+                            self.writer.add_histogram(f"Weights/{name}/{param_name}_hist", param.data.cpu(), epoch) # Ensure CPU
+                        if param.grad is not None:
+                            # Gradient norm for this parameter
+                            grad_norm = param.grad.norm().item()
+                            self.writer.add_scalar(f"GradStats/{name}/{param_name}_norm", grad_norm, epoch)
+                            self.writer.add_histogram(f"GradStats/{name}/{param_name}_hist", param.grad.cpu(), epoch) # Ensure CPU
+
+                            # Update-to-weight ratio (only if weight_norm is available and > 0)
+                            if param.data is not None:
+                                weight_norm_val = param.data.norm().item()
+                                if weight_norm_val > 1e-12:
+                                    update_ratio = grad_norm / weight_norm_val
+                                    self.writer.add_scalar(f"GradStats/{name}/{param_name}_update_ratio", update_ratio, epoch)
+        else:
+            print("'_tracked_layers' not found in TensorboardLogger. Skipping weight stats.")
     
     def _log_sample_visualizations(self, epoch, inputs, targets, outputs):
         """Log sample visualizations"""
@@ -237,8 +239,21 @@ class TensorboardLogger:
             
     def close(self):
         """Clean up resources"""
-        # Clean up hooks here if needed
-        pass
+        for _layer_name, tracker in self.activation_trackers.items():
+            tracker.remove()
+        for _layer_name, (_tracker, handle) in self.zero_rate_trackers.items():
+            handle.remove()
+        if hasattr(self, 'dead_neuron_trackers'):
+            for _layer_name, (_tracker, handle) in self.dead_neuron_trackers.items():
+                handle.remove()
+        
+        self.activation_trackers.clear()
+        self.zero_rate_trackers.clear()
+        if hasattr(self, 'dead_neuron_trackers'):
+            self.dead_neuron_trackers.clear()
+
+        if self.writer:
+            self.writer.close()
 
 
 class ZeroRateTracker:
@@ -293,3 +308,34 @@ class DeadNeuronRateTracker:
             dead_rate = self.channel_zero_counts.sum().item() / (self.total_batches * self.channel_zero_counts.numel())
             self.writer.add_scalar(f"{self.tag}", dead_rate, epoch)
         self.reset() 
+
+class EpochActivationStats:
+    def __init__(self, writer, tag):
+        self.writer = writer
+        self.tag = tag
+        self.activations = []
+        self.hook_handle = None
+
+    @torch.no_grad()
+    def _save_activations_hook(self, module, input, output):
+        # Detach and move to CPU to save memory, especially if accumulating over an epoch
+        self.activations.append(output.detach().cpu()) # Ensure it's on CPU
+
+    def log_epoch(self, epoch):
+        if len(self.activations) > 0:
+            all_activations = torch.cat(self.activations) # Already on CPU
+            # Log mean and std if desired
+            # self.writer.add_scalar(f"{self.tag}/mean", all_activations.mean(), epoch)
+            # self.writer.add_scalar(f"{self.tag}/std", all_activations.std(), epoch)
+            self.writer.add_histogram(f"{self.tag}/hist", all_activations, epoch)
+        self.activations = [] # Clear for next epoch
+
+    def register(self, module):
+        if self.hook_handle is not None: # Avoid double registration
+            self.remove()
+        self.hook_handle = module.register_forward_hook(self._save_activations_hook)
+
+    def remove(self):
+        if self.hook_handle:
+            self.hook_handle.remove()
+            self.hook_handle = None 

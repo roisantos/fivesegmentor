@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ==== Userdefined variables ====
-OUTPUT_PREFIX="RN5dirSL"
+OUTPUT_PREFIX="sRN5dirSL"
 MODEL="RoiNet5"  # Using the learnable channel fusion model
 DATASET="FIVES"
 CONFIG="code/config/config.json"

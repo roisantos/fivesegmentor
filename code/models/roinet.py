@@ -56,6 +56,11 @@ class RoiNet(nn.Module):
         ))
         # After merging, our tensor will have 256 channels at 1/4 resolution.
 
+        # Add Taps for merged inputs
+        self.dict_module.add_module("merged_input_bottle", nn.Identity())
+        self.dict_module.add_module("merged_input_dec3", nn.Identity())
+        self.dict_module.add_module("merged_input_dec4", nn.Identity())
+
         # ------------------ Decoder ------------------
         # Block 3: Upsample from bottleneck.
         self.dict_module.add_module("conv3", cls_init_block(ch, ls_mid_ch[3], k_size=k_size, layer_num=3))
@@ -114,6 +119,7 @@ class RoiNet(nn.Module):
         bottle2 = self.dict_module["bottle2"](bottle1)      # (B, 256, H/4, W/4)
         # Merge the original skip2 with the deepened features.
         bottle_cat = torch.cat([bottle2, skip2], dim=1)     # (B, 512, H/4, W/4)
+        bottle_cat = self.dict_module["merged_input_bottle"](bottle_cat) # Log this tensor
         bottle_out = self.dict_module["merge2"](bottle_cat) # (B, 256, H/4, W/4)
 
         # Decoder
@@ -121,12 +127,14 @@ class RoiNet(nn.Module):
         out3 = self.dict_module["up3"](out3)               # (B, 64, H/2, W/2)
         # Merge with skip1 (from pool1)
         out3 = torch.cat([out3, skip1], dim=1)             # (B, 64+128=192, H/2, W/2)
+        out3 = self.dict_module["merged_input_dec3"](out3) # Log this tensor
         out3 = self.dict_module["merge3"](out3)            # (B, 64, H/2, W/2)
 
         out4 = self.dict_module["conv4"](out3)             # (B, 64, H/2, W/2)
         out4 = self.dict_module["up4"](out4)               # (B, 32, H, W)
         # Merge with skip0 (from conv0)
         out4 = torch.cat([out4, out0], dim=1)              # (B, 32+32=64, H, W)
+        out4 = self.dict_module["merged_input_dec4"](out4) # Log this tensor
         out4 = self.dict_module["merge4"](out4)            # (B, 32, H, W)
 
         out5 = self.dict_module["conv5"](out4)             # (B, 32, H, W)
