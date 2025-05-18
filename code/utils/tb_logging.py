@@ -36,6 +36,7 @@ class TensorboardLogger:
         self.tracked_layers = {}
         self.activation_trackers = {}
         self.zero_rate_trackers = {}
+        self.dead_neuron_trackers = {}
         
         # Register activation trackers for key layers
         self._register_activation_trackers()
