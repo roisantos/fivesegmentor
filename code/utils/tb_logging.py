@@ -319,8 +319,8 @@ class EpochActivationStats:
 
     @torch.no_grad()
     def _save_activations_hook(self, module, input, output):
-        # Detach and move to CPU to save memory, especially if accumulating over an epoch
-        self.activations.append(output.detach().cpu()) # Ensure it's on CPU
+        # Detach and clone; keeps on original device (likely GPU)
+        self.activations.append(output.detach().clone()) 
 
     def log_epoch(self, epoch):
         if len(self.activations) > 0:
