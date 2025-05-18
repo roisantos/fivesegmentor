@@ -314,22 +314,21 @@ class EpochActivationStats:
     def __init__(self, writer, tag):
         self.writer = writer
         self.tag = tag
-        self.activations = []
+        self.last_activations = None  # Changed from a list to a single tensor
         self.hook_handle = None
 
     @torch.no_grad()
     def _save_activations_hook(self, module, input, output):
-        # Detach and clone; keeps on original device (likely GPU)
-        self.activations.append(output.detach().clone()) 
+        # Store only the last seen activations, overwriting previous ones
+        self.last_activations = output.detach().clone() 
 
     def log_epoch(self, epoch):
-        if len(self.activations) > 0:
-            all_activations = torch.cat(self.activations) # Already on CPU
-            # Log mean and std if desired
-            # self.writer.add_scalar(f"{self.tag}/mean", all_activations.mean(), epoch)
-            # self.writer.add_scalar(f"{self.tag}/std", all_activations.std(), epoch)
-            self.writer.add_histogram(f"{self.tag}/hist", all_activations, epoch)
-        self.activations = [] # Clear for next epoch
+        if self.last_activations is not None:
+            # Log mean and std from the last batch if desired (optional)
+            # self.writer.add_scalar(f"{self.tag}/mean_last_batch", self.last_activations.float().mean(), epoch)
+            # self.writer.add_scalar(f"{self.tag}/std_last_batch", self.last_activations.float().std(), epoch)
+            self.writer.add_histogram(f"{self.tag}/hist_last_batch", self.last_activations, epoch)
+        # self.last_activations = None # Optionally clear, or let it persist until next save
 
     def register(self, module):
         if self.hook_handle is not None: # Avoid double registration
