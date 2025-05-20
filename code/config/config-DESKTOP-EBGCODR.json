@@ -1,0 +1,426 @@
+{
+  "models": {
+    "FRNet": {
+      "type": "FRNet",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "RRCNNBlock",
+      "cls_conv_block": "RecurrentConvNeXtBlock"
+    },
+    "FRNet_1ch": {
+      "type": "FRNet_1ch",
+      "ch_in": 1,
+      "ch_out": 1,
+      "cls_init_block": "RRCNNBlock",
+      "cls_conv_block": "RecurrentConvNeXtBlock"
+    },
+    "FRNetR": {
+      "type": "FRNetR",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet11": {
+      "type": "RoiNet",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "out_k_size": 0,
+      "k_size": 11,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet9": {
+      "type": "RoiNet",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "out_k_size": 0,
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet9_plusk": {
+      "type": "RoiNet",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "out_k_size": 21,
+      "k_size": 21,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet7": {
+      "type": "RoiNet",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "out_k_size": 0,
+      "k_size": 7,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet5": {
+      "type": "RoiNet",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "out_k_size": 0,
+      "k_size": 5,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet3": {
+      "type": "RoiNet",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "out_k_size": 0,
+      "k_size": 3,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetR": {
+      "type": "RoiNet",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "cls_init_block": "RRCNNBlock",
+      "cls_conv_block": "RecurrentConvNeXtBlock"
+    },
+    "RoiNet9x1.5": {
+      "type": "RoiNetx1.5",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [48, 96, 192, 192, 96, 48],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet7x1.5": {
+      "type": "RoiNetx1.5",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [48, 96, 192, 192, 96, 48],
+      "k_size": 7,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet5x1.5": {
+      "type": "RoiNetx1.5",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [48, 96, 192, 192, 96, 48],
+      "k_size": 5,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet3x1.5": {
+      "type": "RoiNetx1.5",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [48, 96, 192, 192, 96, 48],
+      "k_size": 3,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet9x0.5": {
+      "type": "RoiNetx0.5",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [16, 32, 64, 64, 32, 16],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet7x0.5": {
+      "type": "RoiNetx0.5",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [16, 32, 64, 64, 32, 16],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet5x0.5": {
+      "type": "RoiNetx0.5",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [16, 32, 64, 64, 32, 16],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetx2": {
+      "type": "RoiNetx2",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [64, 128, 256, 256, 128, 64],
+      "k_size": 11,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet_AblationOne_Simple": {
+      "type": "RoiNetAblationOneBlock",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "SimpleResBlock", 
+      "cls_conv_block": "SimpleResBlock"
+    },
+    "RoiNet_Ablation3_Simple": {
+      "type": "RoiNetAblationThreeBlock",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "SimpleResBlock",
+      "cls_conv_block": "SimpleResBlock"
+    },
+    "RoiNet_AblationOne_Residual": {
+      "type": "RoiNetAblationOneBlock",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock", 
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet_Ablation3_Residual": {
+      "type": "RoiNetAblationThreeBlock",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet_AblationOne_Simple_similar": {
+      "type": "RoiNetAblationOneBlock_similar",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "SimpleResBlock", 
+      "cls_conv_block": "SimpleResBlock"
+    },
+    "RoiNet_Ablation3_Simple_similar": {
+      "type": "RoiNetAblationThreeBlock_similar",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "SimpleResBlock",
+      "cls_conv_block": "SimpleResBlock"
+    },
+    "RoiNet_AblationOne_Residual_similar": {
+      "type": "RoiNetAblationOneBlock_similar",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock", 
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet_Ablation3_Residual_similar": {
+      "type": "RoiNetAblationThreeBlock_similar",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet_1bottleneck_residual": {
+      "type": "RoiNet_1bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNet_3bottleneck_residual": {
+      "type": "RoiNet_3bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetTest1bottleneck_residual": {
+      "type": "RoiNetTest1bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetTest3bottleneck_residual": {
+      "type": "RoiNetTest3bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetTest2bottleneck_residual": {
+      "type": "RoiNetTest2bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetTest1bottleneck_simple": {
+      "type": "RoiNetTest1bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "SimpleResBlock",
+      "cls_conv_block": "SimpleResBlock"
+    },
+    "RoiNetTest3bottleneck_simple": {
+      "type": "RoiNetTest3bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "SimpleResBlock",
+      "cls_conv_block": "SimpleResBlock"
+    },
+    "RoiNetTest2bottleneck_simple": {
+      "type": "RoiNetTest2bottleneck",
+      "ch_in": 3,
+      "ch_out": 1,
+      "cls_init_block": "SimpleResBlock",
+      "cls_conv_block": "SimpleResBlock"
+    },
+    "RoiNetNoSkip": {
+      "type": "RoiNetNoSkip",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetSumFusion": {
+      "type": "RoiNetSumFusion",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetAttnSkip": {
+      "type": "RoiNetAttnSkip",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetResSkip": {
+      "type": "RoiNetResSkip",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetConcatPlus": {
+      "type": "RoiNetConcatPlus",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "RoiNetMultiSkip": {
+      "type": "RoiNetMultiSkip",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "SantosNet_GCh": {
+      "type": "SantosNet_GCh",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "SantosNet_PCh": {
+      "type": "SantosNet_PCh",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock"
+    },
+    "SantosNet_CPCh": {
+      "type": "SantosNet_CPCh",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock",
+      "custom_weights": [0.1, 0.8, 0.1]
+    },
+    "SantosNet_CPCh_variant1": {
+      "type": "SantosNet_CPCh",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock",
+      "custom_weights": [0.2, 0.8, 0.0]
+    },
+    "SantosNet_CPCh_variant2": {
+      "type": "SantosNet_CPCh",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock",
+      "custom_weights": [0.3, 0.6, 0.1]
+    },
+    "SantosNet_CPCh_variant3": {
+      "type": "SantosNet_CPCh",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock",
+      "custom_weights": [0.33, 0.34, 0.33]
+    },
+    "SantosNet_CPCh_variant4": {
+      "type": "SantosNet_CPCh",
+      "ch_in": 3,
+      "ch_out": 1,
+      "ls_mid_ch": [32, 64, 128, 128, 64, 32],
+      "k_size": 9,
+      "cls_init_block": "ResidualBlock",
+      "cls_conv_block": "ResidualBlock",
+      "custom_weights": [0.3, 0.7, 0.0]
+    }
+
+
+    
+  },
+  "datasets": {
+    "FIVES512": {
+        "paths": {
+            "train": "dataset/FIVES512/train",
+            "val": "dataset/FIVES512/val",
+            "test": "dataset/FIVES512/test"
+        },
+        "preprocessing": {
+          "start": 0,
+          "end": 1
+        }
+    },
+      "FIVES": {
+          "paths": {
+              "train": "dataset/FIVES/train",
+              "val": "dataset/FIVES/val",
+              "test": "dataset/FIVES/test"
+          },
+          "preprocessing": {
+            "start": 0,
+            "end": 1
+          }
+      }
+  }
+}
