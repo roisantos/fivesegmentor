@@ -9,7 +9,7 @@ LR=1e-4
 WEIGHT_DECAY=0.001
 FOLDS=5
 
-python3 code/training/VesselView_10fold_cv.py \
+python3 code/training/VesselView_10fold_cv_7k.py \
   --dataset "${DATASET}" \
   --epochs "${EPOCHS}" \
   --bs "${BATCH_SIZE}" \

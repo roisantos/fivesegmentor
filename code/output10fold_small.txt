@@ -1,0 +1,1365 @@
+(venv) uscciavs@c206-14 /mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fork-roi/fivesegmentor $ bash code/scripts/training_VesselView_10fold_cv_3k.sh 
+Parsing arguments...
+Initializing TensorBoard writer...
+Initializing dataset...
+Found 800 samples
+
+=== Fold 1/5 ===
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 17.9 MB | Cached: 24.0 MB
+
+Fold 1 Train Epoch 1: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.389, curr_loss=0.191, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 1: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:12<00:00,  2.21batch/s, avg_loss=0.352, curr_loss=0.198, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 2: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:22<00:00,  1.16s/batch, avg_loss=0.183, curr_loss=0.101, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 2: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.242, curr_loss=0.141, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 3: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:22<00:00,  1.16s/batch, avg_loss=0.132, curr_loss=0.294, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 3: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.25batch/s, avg_loss=0.251, curr_loss=0.119, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 4: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:22<00:00,  1.16s/batch, avg_loss=0.114, curr_loss=0.112, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 4: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.25batch/s, avg_loss=0.223, curr_loss=0.088, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 5: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:22<00:00,  1.16s/batch, avg_loss=0.103, curr_loss=0.103, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 5: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:11<00:00,  2.25batch/s, avg_loss=0.209, curr_loss=0.104, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 6: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.097, curr_loss=0.131, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 6: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:11<00:00,  2.25batch/s, avg_loss=0.183, curr_loss=0.092, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 7: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:22<00:00,  1.16s/batch, avg_loss=0.093, curr_loss=0.099, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 7: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.25batch/s, avg_loss=0.194, curr_loss=0.129, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 8: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.091, curr_loss=0.041, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 8: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.225, curr_loss=0.091, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 9: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.088, curr_loss=0.090, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 9: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:11<00:00,  2.25batch/s, avg_loss=0.181, curr_loss=0.069, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 10: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.086, curr_loss=0.155, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 10: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:11<00:00,  2.25batch/s, avg_loss=0.200, curr_loss=0.072, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 11: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.084, curr_loss=0.113, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 11: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:11<00:00,  2.25batch/s, avg_loss=0.177, curr_loss=0.077, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 12: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.082, curr_loss=0.225, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 12: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:11<00:00,  2.25batch/s, avg_loss=0.181, curr_loss=0.093, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 13: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.081, curr_loss=0.043, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 13: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:11<00:00,  2.25batch/s, avg_loss=0.193, curr_loss=0.086, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 14: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.080, curr_loss=0.106, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 14: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:11<00:00,  2.25batch/s, avg_loss=0.234, curr_loss=0.077, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 15: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.078, curr_loss=0.037, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 15: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:11<00:00,  2.25batch/s, avg_loss=0.176, curr_loss=0.095, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 16: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.078, curr_loss=0.050, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 16: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.213, curr_loss=0.077, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 17: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.076, curr_loss=0.077, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 17: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.172, curr_loss=0.088, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 18: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.076, curr_loss=0.193, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 18: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.194, curr_loss=0.068, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 19: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.075, curr_loss=0.043, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 19: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.205, curr_loss=0.055, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 20: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.074, curr_loss=0.049, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 20: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.204, curr_loss=0.069, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 21: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.073, curr_loss=0.040, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 21: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.204, curr_loss=0.066, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 22: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.072, curr_loss=0.040, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 22: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:11<00:00,  2.25batch/s, avg_loss=0.164, curr_loss=0.086, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 23: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.071, curr_loss=0.059, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 23: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.202, curr_loss=0.090, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 24: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.070, curr_loss=0.034, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 24: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.216, curr_loss=0.128, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Train Epoch 25: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:23<00:00,  1.16s/batch, avg_loss=0.069, curr_loss=0.102, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 1 Val Epoch 25: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.182, curr_loss=0.064, gpu_usage=GPU 0: 89.2MB]
+
+=== Fold 1/5 Results ===
+     ACC: 0.9836
+     FDR: 0.0756
+     SEN: 0.7971
+     SPE: 0.9947
+   GMEAN: 0.8764
+     IOU: 0.7467
+    DICE: 0.8359
+  AVG_MS: 444.1686
+NUM_PARAMS: 4687174.0000
+
+=== Fold 2/5 ===
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 17.9 MB | Cached: 24.0 MB
+
+Fold 2 Train Epoch 1: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.559, curr_loss=0.349, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 1: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.467, curr_loss=0.411, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 2: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.287, curr_loss=0.138, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 2: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.284, curr_loss=0.263, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 3: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.170, curr_loss=0.353, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 3: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.261, curr_loss=0.179, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 4: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:19<00:00,  1.16s/batch, avg_loss=0.131, curr_loss=0.138, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 4: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.236, curr_loss=0.125, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 5: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.113, curr_loss=0.077, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 5: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.185, curr_loss=0.177, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 6: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.103, curr_loss=0.055, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 6: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.210, curr_loss=0.151, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 7: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.096, curr_loss=0.075, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 7: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.196, curr_loss=0.137, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 8: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.093, curr_loss=0.061, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 8: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.177, curr_loss=0.146, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 9: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.089, curr_loss=0.073, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 9: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.184, curr_loss=0.173, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 10: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.087, curr_loss=0.045, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 10: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.217, curr_loss=0.110, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 11: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.085, curr_loss=0.110, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 11: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.178, curr_loss=0.133, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 12: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.083, curr_loss=0.049, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 12: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.167, curr_loss=0.188, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 13: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.082, curr_loss=0.077, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 13: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.169, curr_loss=0.145, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 14: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.080, curr_loss=0.309, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 14: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.141, curr_loss=0.144, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 15: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.079, curr_loss=0.100, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 15: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.192, curr_loss=0.156, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 16: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.077, curr_loss=0.043, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 16: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.177, curr_loss=0.120, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 17: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.077, curr_loss=0.067, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 17: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.162, curr_loss=0.128, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 18: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.076, curr_loss=0.055, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 18: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.161, curr_loss=0.123, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 19: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.075, curr_loss=0.065, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 19: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.157, curr_loss=0.154, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 20: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.074, curr_loss=0.047, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 20: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.147, curr_loss=0.146, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 21: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.074, curr_loss=0.072, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 21: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.174, curr_loss=0.160, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 22: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.073, curr_loss=0.040, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 22: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.189, curr_loss=0.126, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 23: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.072, curr_loss=0.072, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 23: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.168, curr_loss=0.138, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 24: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.071, curr_loss=0.055, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 24: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.154, curr_loss=0.177, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Train Epoch 25: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.070, curr_loss=0.051, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 2 Val Epoch 25: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.170, curr_loss=0.148, gpu_usage=GPU 0: 89.2MB]
+
+=== Fold 2/5 Results ===
+     ACC: 0.9833
+     FDR: 0.0829
+     SEN: 0.8314
+     SPE: 0.9930
+   GMEAN: 0.9021
+     IOU: 0.7692
+    DICE: 0.8592
+  AVG_MS: 441.0368
+NUM_PARAMS: 4687174.0000
+
+=== Running Average (Folds 1-2) ===
+    DICE: 0.8476 ± 0.0117
+     ACC: 0.9835 ± 0.0002
+     FDR: 0.0793 ± 0.0037
+     SEN: 0.8143 ± 0.0171
+     SPE: 0.9938 ± 0.0008
+   GMEAN: 0.8893 ± 0.0129
+     IOU: 0.7579 ± 0.0112
+
+=== Fold 3/5 ===
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 17.9 MB | Cached: 24.0 MB
+
+Fold 3 Train Epoch 1: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.526, curr_loss=0.460, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 1: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.384, curr_loss=0.362, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 2: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.252, curr_loss=0.288, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 2: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.230, curr_loss=0.339, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 3: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.159, curr_loss=0.093, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 3: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.191, curr_loss=0.190, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 4: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.127, curr_loss=0.076, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 4: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.233, curr_loss=0.230, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 5: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.112, curr_loss=0.153, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 5: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.183, curr_loss=0.124, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 6: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.105, curr_loss=0.176, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 6: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.171, curr_loss=0.166, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 7: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.099, curr_loss=0.049, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 7: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.172, curr_loss=0.164, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 8: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.096, curr_loss=0.102, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 8: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.162, curr_loss=0.165, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 9: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.093, curr_loss=0.049, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 9: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.152, curr_loss=0.136, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 10: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.090, curr_loss=0.058, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 10: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.160, curr_loss=0.227, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 11: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.089, curr_loss=0.067, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 11: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.28batch/s, avg_loss=0.216, curr_loss=0.182, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 12: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:19<00:00,  1.16s/batch, avg_loss=0.086, curr_loss=0.073, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 12: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.152, curr_loss=0.135, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 13: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.085, curr_loss=0.050, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 13: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.154, curr_loss=0.176, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 14: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.084, curr_loss=0.050, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 14: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.147, curr_loss=0.155, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 15: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.082, curr_loss=0.042, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 15: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.152, curr_loss=0.129, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 16: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.081, curr_loss=0.056, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 16: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.174, curr_loss=0.136, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 17: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.080, curr_loss=0.053, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 17: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.140, curr_loss=0.117, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 18: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.080, curr_loss=0.036, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 18: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.156, curr_loss=0.085, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 19: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.078, curr_loss=0.168, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 19: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.145, curr_loss=0.236, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 20: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.077, curr_loss=0.146, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 20: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.143, curr_loss=0.205, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 21: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.076, curr_loss=0.046, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 21: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.157, curr_loss=0.148, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 22: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.076, curr_loss=0.091, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 22: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.177, curr_loss=0.111, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 23: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.075, curr_loss=0.044, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 23: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.173, curr_loss=0.105, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 24: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.073, curr_loss=0.053, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 24: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.157, curr_loss=0.164, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Train Epoch 25: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.073, curr_loss=0.044, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 3 Val Epoch 25: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.147, curr_loss=0.132, gpu_usage=GPU 0: 89.2MB]
+
+=== Fold 3/5 Results ===
+     ACC: 0.9846
+     FDR: 0.0532
+     SEN: 0.8158
+     SPE: 0.9958
+   GMEAN: 0.8915
+     IOU: 0.7769
+    DICE: 0.8603
+  AVG_MS: 440.5513
+NUM_PARAMS: 4687174.0000
+
+=== Running Average (Folds 1-3) ===
+    DICE: 0.8518 ± 0.0112
+     ACC: 0.9838 ± 0.0005
+     FDR: 0.0706 ± 0.0126
+     SEN: 0.8148 ± 0.0140
+     SPE: 0.9945 ± 0.0011
+   GMEAN: 0.8900 ± 0.0106
+     IOU: 0.7643 ± 0.0128
+
+=== Fold 4/5 ===
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 17.9 MB | Cached: 24.0 MB
+
+Fold 4 Train Epoch 1: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.489, curr_loss=0.413, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 1: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.28batch/s, avg_loss=0.409, curr_loss=0.432, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 2: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.221, curr_loss=0.141, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 2: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.278, curr_loss=0.432, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 3: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.143, curr_loss=0.089, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 3: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.220, curr_loss=0.347, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 4: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.118, curr_loss=0.070, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 4: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.189, curr_loss=0.250, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 5: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.108, curr_loss=0.048, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 5: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.250, curr_loss=0.181, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 6: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.100, curr_loss=0.044, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 6: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.181, curr_loss=0.165, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 7: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.096, curr_loss=0.073, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 7: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.176, curr_loss=0.234, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 8: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.092, curr_loss=0.212, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 8: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.175, curr_loss=0.152, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 9: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.090, curr_loss=0.114, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 9: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.199, curr_loss=0.150, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 10: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.087, curr_loss=0.044, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 10: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.217, curr_loss=0.157, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 11: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.086, curr_loss=0.040, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 11: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.180, curr_loss=0.188, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 12: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.085, curr_loss=0.138, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 12: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.162, curr_loss=0.185, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 13: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.083, curr_loss=0.085, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 13: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.221, curr_loss=0.153, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 14: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.082, curr_loss=0.849, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 14: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.178, curr_loss=0.224, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 15: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.080, curr_loss=0.057, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 15: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.201, curr_loss=0.204, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 16: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.079, curr_loss=0.042, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 16: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.166, curr_loss=0.160, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 17: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.078, curr_loss=0.080, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 17: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.174, curr_loss=0.178, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 18: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.077, curr_loss=0.066, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 18: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.159, curr_loss=0.163, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 19: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.077, curr_loss=0.178, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 19: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.157, curr_loss=0.148, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 20: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.074, curr_loss=0.204, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 20: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.186, curr_loss=0.167, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 21: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.075, curr_loss=0.052, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 21: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.198, curr_loss=0.151, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 22: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.073, curr_loss=0.037, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 22: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.206, curr_loss=0.171, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 23: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.073, curr_loss=0.035, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 23: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.183, curr_loss=0.143, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 24: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.072, curr_loss=0.061, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 24: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.161, curr_loss=0.178, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Train Epoch 25: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.071, curr_loss=0.058, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 4 Val Epoch 25: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.176, curr_loss=0.154, gpu_usage=GPU 0: 89.2MB]
+
+=== Fold 4/5 Results ===
+     ACC: 0.9806
+     FDR: 0.0696
+     SEN: 0.8084
+     SPE: 0.9928
+   GMEAN: 0.8855
+     IOU: 0.7527
+    DICE: 0.8426
+  AVG_MS: 441.5570
+NUM_PARAMS: 4687174.0000
+
+=== Running Average (Folds 1-4) ===
+    DICE: 0.8495 ± 0.0105
+     ACC: 0.9830 ± 0.0015
+     FDR: 0.0704 ± 0.0110
+     SEN: 0.8132 ± 0.0124
+     SPE: 0.9940 ± 0.0012
+   GMEAN: 0.8889 ± 0.0094
+     IOU: 0.7614 ± 0.0122
+
+=== Fold 5/5 ===
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 17.9 MB | Cached: 24.0 MB
+
+Fold 5 Train Epoch 1: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.390, curr_loss=0.227, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 1: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.375, curr_loss=0.272, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 2: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.174, curr_loss=0.100, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 2: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.260, curr_loss=0.153, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 3: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.129, curr_loss=0.127, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 3: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.235, curr_loss=0.259, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 4: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.111, curr_loss=0.101, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 4: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.192, curr_loss=0.198, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 5: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.102, curr_loss=0.084, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 5: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.233, curr_loss=0.156, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 6: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.097, curr_loss=0.052, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 6: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.211, curr_loss=0.152, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 7: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.093, curr_loss=0.047, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 7: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.186, curr_loss=0.182, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 8: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.090, curr_loss=0.177, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 8: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.187, curr_loss=0.221, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 9: 100%|███████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.088, curr_loss=0.063, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 9: 100%|█████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.204, curr_loss=0.108, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 10: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.086, curr_loss=0.086, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 10: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.184, curr_loss=0.180, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 11: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.084, curr_loss=0.096, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 11: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.184, curr_loss=0.181, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 12: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.083, curr_loss=0.044, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 12: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.199, curr_loss=0.137, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 13: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.081, curr_loss=0.081, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 13: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.167, curr_loss=0.214, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 14: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:21<00:00,  1.16s/batch, avg_loss=0.080, curr_loss=0.061, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 14: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.197, curr_loss=0.172, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 15: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.079, curr_loss=0.053, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 15: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.179, curr_loss=0.149, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 16: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.078, curr_loss=0.038, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 16: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.28batch/s, avg_loss=0.202, curr_loss=0.153, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 17: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.077, curr_loss=0.045, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 17: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.190, curr_loss=0.147, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 18: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.076, curr_loss=0.044, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 18: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.185, curr_loss=0.184, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 19: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.075, curr_loss=0.035, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 19: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.26batch/s, avg_loss=0.175, curr_loss=0.131, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 20: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.073, curr_loss=0.041, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 20: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.173, curr_loss=0.146, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 21: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.073, curr_loss=0.119, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 21: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.191, curr_loss=0.116, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 22: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.072, curr_loss=0.186, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 22: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.198, curr_loss=0.139, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 23: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.071, curr_loss=0.046, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 23: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.28batch/s, avg_loss=0.204, curr_loss=0.108, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 24: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.070, curr_loss=0.046, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 24: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.207, curr_loss=0.167, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Train Epoch 25: 100%|██████████████████████████████████████████████████████████████████| 640/640 [12:20<00:00,  1.16s/batch, avg_loss=0.069, curr_loss=0.108, gpu_usage=GPU 0: 89.2MB]
+
+==== Memoria GPU - Inicio de época ====
+GPU 0 - Total: 14913.7 MB | Allocated: 73.2 MB | Cached: 86.0 MB
+
+Fold 5 Val Epoch 25: 100%|████████████████████████████████████████████████████████████████████| 160/160 [01:10<00:00,  2.27batch/s, avg_loss=0.178, curr_loss=0.148, gpu_usage=GPU 0: 89.2MB]
+
+=== Fold 5/5 Results ===
+     ACC: 0.9793
+     FDR: 0.0940
+     SEN: 0.8005
+     SPE: 0.9905
+   GMEAN: 0.8791
+     IOU: 0.7402
+    DICE: 0.8331
+  AVG_MS: 439.7539
+NUM_PARAMS: 4687174.0000
+
+=== Running Average (Folds 1-5) ===
+    DICE: 0.8462 ± 0.0115
+     ACC: 0.9823 ± 0.0020
+     FDR: 0.0751 ± 0.0136
+     SEN: 0.8106 ± 0.0122
+     SPE: 0.9933 ± 0.0018
+   GMEAN: 0.8869 ± 0.0092
+     IOU: 0.7571 ± 0.0138
+
+=== Final Results (All Folds) ===
+    DICE: 0.8462 ± 0.0115
+     ACC: 0.9823 ± 0.0020
+     FDR: 0.0751 ± 0.0136
+     SEN: 0.8106 ± 0.0122
+     SPE: 0.9933 ± 0.0018
+   GMEAN: 0.8869 ± 0.0092
+     IOU: 0.7571 ± 0.0138

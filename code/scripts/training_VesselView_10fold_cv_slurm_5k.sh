@@ -13,7 +13,7 @@ FOLDS=5
 
 
 
-OUTPUT_PREFIX="VesselView_5fold_35epochs"
+OUTPUT_PREFIX="VesselView_5fold_35epochs_5k"
 
 # ==== Prep output dir + SBATCH file path ====
 mkdir -p runs/${OUTPUT_PREFIX}
@@ -37,7 +37,7 @@ module load python/3.9.9
 cd /mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fork-roi/fivesegmentor
 source venv/bin/activate
 
-python3 code/training/VesselView_10fold_cv.py \
+python3 code/training/VesselView_10fold_cv_5k.py \
   --dataset "${DATASET}" \
   --epochs "${EPOCHS}" \
   --bs "${BATCH_SIZE}" \
