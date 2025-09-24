@@ -67,8 +67,8 @@ def run_inference_on_directory(input_dir, output_dir, model_path):
 # Directory containing images
 input_dir = r"dataset\FIVES512\test\scaffoldsCENTER1024masked\masked"
 # Directory to save the results
-output_dir = os.path.join('inference_results', '2024-06-24 after 234 epochs DICE 085')
+output_dir = os.path.join('inference_results', '2025-06-28 after 280 epochs')
 # Path to the trained model
-model_path = 'bestRoi.pth'
+model_path = 'C:\Users\roi\OneDrive - Universidade de Santiago de Compostela\investigacion\vesselview_pth\model_best.pth'
 
 run_inference_on_directory(input_dir, output_dir, model_path)

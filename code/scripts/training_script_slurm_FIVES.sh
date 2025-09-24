@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # ==== User defined variables ====
-OUTPUT_PREFIX="dSNPChFT"
-MODEL="SantosNet_PCh"
+OUTPUT_PREFIX="roinet9sameaspaper"
+MODEL="RoiNet9"
 DATASET="FIVES"
 CONFIG="code/config/config.json"
 EPOCHS=300
@@ -15,7 +15,7 @@ LOGGING="True"
 THRESH_VALUE=100
 
 
-LOSS="FocalTversky"
+LOSS="Dice"
 ALPHA=0.2; BETA=0.8; GAMMA=1.5
 
 AUGMENT_OTROSFIVES="True"

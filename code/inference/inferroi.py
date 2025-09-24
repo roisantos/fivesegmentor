@@ -262,13 +262,13 @@ def run_inference_on_directory(image_dir, label_dir, output_dir, model_path):
 
 # ------------------ User Settings ------------------
 # Directory containing the input images
-image_dir = r"/mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fives-save/FIVESoriginal/test/image"
+image_dir = r"C:\Users\roi\OneDrive - Universidade de Santiago de Compostela\GitHub\FIVESoriginal\test\image"
 # Directory containing the corresponding ground-truth labels
-label_dir = r"/mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fives-save/FIVESoriginal/test/label"
+label_dir = r"C:\Users\roi\OneDrive - Universidade de Santiago de Compostela\GitHub\FIVESoriginal\test\label"
 # Directory where the inference results will be saved
-output_dir = os.path.join('inference_results', 'VesselView_66epochs')
-# Path to the trained RoiNet model weights (update this if needed)
-model_path = '/mnt/netapp2/Store_uni/home/usc/ci/avs/tfg/tfg/fork-roi/fivesegmentor/run_benchmark_runs/RoiNet9_FIVES_Dice_sameAsOtrosfives_slurm_result_2025-03-05_19-14-41/RoiNet9_Dice/model_best.pth'
+output_dir = os.path.join('inference_results', '2025-06-28 after 280 epochs')
+# Path to the trained model
+model_path = r".\vesselview_pth\model_best.pth"
 
 # Run the inference
 run_inference_on_directory(image_dir, label_dir, output_dir, model_path)

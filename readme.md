@@ -1,10 +1,22 @@
 # VesselView: A CNN for Segmentation of Vessels in High-Resolution Retinal Fundus Images
 
-This repository contains the implementation of VesselView, a convolutional neural network specifically designed for the segmentation of blood vessels in high-resolution retinal fundus images. This work has been submitted for publication by Roi Santos-Mateos (me) et al. under the title "RetNet: A CNN for Segmentation of Vessels in High-Resolution Retinal Fundus Images".
+This repository contains the official implementation of VesselView, a U-Net–inspired convolutional neural network designed for the segmentation of blood vessels in high‑resolution retinal fundus images. The method is described in the following peer‑reviewed chapter:
+
+Santos‑Mateos, R., Velev‑Santos, A., Pardo, X. M. (2026). VesselView: A CNN for Segmentation of Vessels in High‑Resolution Retinal Fundus Images. In: Pattern Recognition and Image Analysis (IbPRIA 2025). Lecture Notes in Computer Science (LNCS), vol 15938, pp. 258–270. Springer, Cham. [Springer chapter](https://link.springer.com/chapter/10.1007/978-3-031-99568-2_21), [DOI](https://doi.org/10.1007/978-3-031-99568-2_21).
+
+## Authors
+
+- Roi Santos‑Mateos — Escola Técnica Superior de Enxeñaría (ETSE) and Universidade de Santiago de Compostela; CiTIUS
+- Alexander Velev‑Santos — Escola Técnica Superior de Enxeñaría (ETSE) and Universidade de Santiago de Compostela; CiTIUS
+- Xosé M. Pardo — CiTIUS, Universidade de Santiago de Compostela
+
+## Abstract
+
+Retinal fundus imaging provides a noninvasive view of the eye’s microvasculature, enabling early detection of ocular and systemic diseases. VesselView is a U‑Net–inspired CNN that uses double‑convolution residual blocks with large kernels, a deepened bottleneck, and carefully designed skip connections to segment vessels in full‑resolution fundus images. Evaluated on the FIVES dataset at 2048×2048 resolution, VesselView achieves strong overall performance—measured by ROC AUC—with particularly competitive results on glaucomatous and normal images. Qualitative comparisons indicate a balance of fewer missed vessels at the cost of more false positives relative to competing models, and an ablation study highlights the importance of the chosen skip connections for high‑resolution segmentation.
 
 ## Overview
 
-RetNet is an advanced deep learning model for accurate segmentation of blood vessels in retinal fundus images. The neural network architecture employs a U-Net-like structure with custom residual blocks and specialized bottleneck layers to effectively capture vessel structures at different scales. The model has been tested on high-resolution images and achieves state-of-the-art performance on standard retinal vessel segmentation benchmarks.
+VesselView is an advanced deep learning model for accurate segmentation of blood vessels in retinal fundus images. The neural network architecture employs a U-Net-like structure with custom residual blocks and specialized bottleneck layers to effectively capture vessel structures at different scales. The model has been tested on high-resolution images and achieves state-of-the-art performance on standard retinal vessel segmentation benchmarks.
 
 ## Repository Structure
 
@@ -75,10 +87,25 @@ Required packages are listed in the `requeriments` directory. The core dependenc
 
 ## Citation
 
-If you use this code in your research, please cite:
+If you use this code in your research, please cite the VesselView chapter:
 
-```
-TBD
+Santos‑Mateos, R., Velev‑Santos, A., Pardo, X. M. (2026). VesselView: A CNN for Segmentation of Vessels in High‑Resolution Retinal Fundus Images. In N. Gonçalves, H. P. Oliveira, J. A. Sánchez (Eds.), Pattern Recognition and Image Analysis (IbPRIA 2025). Lecture Notes in Computer Science, vol 15938 (pp. 258–270). Springer, Cham. [DOI](https://doi.org/10.1007/978-3-031-99568-2_21).
+
+### BibTeX
+
+```bibtex
+@incollection{Santos-Mateos_2026_VesselView,
+  author    = {Santos{-}Mateos, Roi and Velev{-}Santos, Alexander and Pardo, Xos{\'e} M.},
+  title     = {VesselView: A CNN for Segmentation of Vessels in High-Resolution Retinal Fundus Images},
+  booktitle = {Pattern Recognition and Image Analysis (IbPRIA 2025)},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {15938},
+  pages     = {258--270},
+  publisher = {Springer, Cham},
+  year      = {2026},
+  doi       = {10.1007/978-3-031-99568-2_21},
+  url       = {https://link.springer.com/chapter/10.1007/978-3-031-99568-2_21}
+}
 ```
 
 ## License
